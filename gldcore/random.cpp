@@ -41,6 +41,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef __arm64__
+#define finite isfinite
+#endif
+
 #ifdef __MINGW32__
 char* strtok_t(char *str, const char *delim, char **nextp)
 {
