@@ -16,14 +16,14 @@
 #undef OPTIONAL
 #endif
 #include <helics/helics98.hpp>
-//#include <helics/application_api/CombinationFederate.hpp>
-//#include <helics/application_api/Endpoints.hpp>
-//#include <helics/application_api/Inputs.hpp>
-//#include <helics/application_api/Publications.hpp>
-//#include <helics/helics_enums.h>
+// #include <helics/application_api/CombinationFederate.hpp>
+// #include <helics/application_api/Endpoints.hpp>
+// #include <helics/application_api/Inputs.hpp>
+// #include <helics/application_api/Publications.hpp>
+// #include <helics/helics_enums.h>
 #endif
-#include<sstream>
-#include<vector>
+#include <sstream>
+#include <vector>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -47,32 +47,39 @@ class helics_msg;
 	DATAEXCHANGEDIRECTION drtn;
 	COMMUNICATIONTYPE ctype; ///<identifies which helics communication function to call. Only used for communicating with helics.
 } FUNCTIONSRELAY;*/
-//extern "C" FUNCTIONADDR add_helics_function(helics_msg *route, const char *fclass,const char *flocal, const char *rclass, const char *rname, TRANSLATOR *xlate, DATAEXCHANGEDIRECTION direction, COMMUNICATIONTYPE ctype );
-//extern "C" FUNCTIONSRELAY *find_helics_function(const char *rclass, const char *rname);
-//extern "C" size_t helics_from_hex(void *buf, size_t len, const char *hex, size_t hexlen);
+// extern "C" FUNCTIONADDR add_helics_function(helics_msg *route, const char *fclass,const char *flocal, const char *rclass, const char *rname, TRANSLATOR *xlate, DATAEXCHANGEDIRECTION direction, COMMUNICATIONTYPE ctype );
+// extern "C" FUNCTIONSRELAY *find_helics_function(const char *rclass, const char *rname);
+// extern "C" size_t helics_from_hex(void *buf, size_t len, const char *hex, size_t hexlen);
 
-class json_publication {
+class json_publication
+{
 public:
-	json_publication(string objName, string propName){
+	json_publication(string objName, string propName)
+	{
 		object_name = objName;
 		property_name = propName;
 		const char *pObjName = objName.c_str();
 		const char *pPropName = propName.c_str();
-		char *pObjBuf = new char[strlen(pObjName)+1];
-		char *pPropBuf = new char[strlen(pPropName)+1];
+		char *pObjBuf = new char[strlen(pObjName) + 1];
+		char *pPropBuf = new char[strlen(pPropName) + 1];
 		strcpy(pObjBuf, pObjName);
 		strcpy(pPropBuf, pPropName);
-		if(objName.compare("globals") != 0){
-			gl_verbose("helics_msg::init(): Creating publication of property %s for object %s.",pPropBuf,pObjBuf);
+		if (objName.compare("globals") != 0)
+		{
+			gl_verbose("helics_msg::init(): Creating publication of property %s for object %s.", pPropBuf, pObjBuf);
 			prop = new gld_property(pObjBuf, pPropBuf);
-			if(!prop->is_valid()){
-				gl_warning("helics_msg::init(): There is no object %s with property %s.",pObjBuf,pPropBuf);
+			if (!prop->is_valid())
+			{
+				gl_warning("helics_msg::init(): There is no object %s with property %s.", pObjBuf, pPropBuf);
 			}
-		} else {
-			gl_verbose("helics_msg::init(): Creating publication of global property %s.",pPropBuf);
+		}
+		else
+		{
+			gl_verbose("helics_msg::init(): Creating publication of global property %s.", pPropBuf);
 			prop = new gld_property(pPropBuf);
-			if(!prop->is_valid()){
-				gl_warning("helics_msg::init(): There is no global variable named %s.",pPropBuf);
+			if (!prop->is_valid())
+			{
+				gl_warning("helics_msg::init(): There is no global variable named %s.", pPropBuf);
 			}
 		}
 	}
@@ -81,9 +88,11 @@ public:
 	gld_property *prop;
 };
 #if HAVE_HELICS
-class helics_value_publication {
+class helics_value_publication
+{
 public:
-	helics_value_publication(){
+	helics_value_publication()
+	{
 		pObjectProperty = NULL;
 	}
 	string objectName;
@@ -93,9 +102,11 @@ public:
 	helicscpp::Publication HelicsPublication;
 };
 
-class helics_value_subscription {
+class helics_value_subscription
+{
 public:
-	helics_value_subscription(){
+	helics_value_subscription()
+	{
 		pObjectProperty = NULL;
 	}
 	string objectName;
@@ -105,9 +116,11 @@ public:
 	helicscpp::Input HelicsSubscription;
 };
 
-class helics_endpoint_publication {
+class helics_endpoint_publication
+{
 public:
-	helics_endpoint_publication(){
+	helics_endpoint_publication()
+	{
 		pObjectProperty = NULL;
 	}
 	string objectName;
@@ -118,9 +131,11 @@ public:
 	helicscpp::Endpoint HelicsPublicationEndpoint;
 };
 
-class helics_endpoint_subscription {
+class helics_endpoint_subscription
+{
 public:
-	helics_endpoint_subscription(){
+	helics_endpoint_subscription()
+	{
 		pObjectProperty = NULL;
 	}
 	string objectName;
@@ -130,64 +145,74 @@ public:
 	helicscpp::Endpoint HelicsSubscriptionEndpoint;
 };
 
-class json_helics_value_publication {
+class json_helics_value_publication
+{
 public:
-	json_helics_value_publication(){
+	json_helics_value_publication()
+	{
 	}
 	Json::Value objectPropertyBundle;
-	vector<json_publication*> jsonPublications;
+	vector<json_publication *> jsonPublications;
 	string name;
 	helicscpp::Publication HelicsPublication;
 };
 
-class json_helics_value_subscription {
+class json_helics_value_subscription
+{
 public:
-	json_helics_value_subscription(){
+	json_helics_value_subscription()
+	{
 	}
 	string target;
 	helicscpp::Input HelicsSubscription;
 };
 
-class json_helics_endpoint_publication {
+class json_helics_endpoint_publication
+{
 public:
-	json_helics_endpoint_publication(){
+	json_helics_endpoint_publication()
+	{
 	}
 	Json::Value objectPropertyBundle;
-	vector<json_publication*> jsonPublications;
+	vector<json_publication *> jsonPublications;
 	string name;
 	string destination;
 	helicscpp::Endpoint HelicsPublicationEndpoint;
 };
 
-class json_helics_endpoint_subscription {
+class json_helics_endpoint_subscription
+{
 public:
-	json_helics_endpoint_subscription(){
+	json_helics_endpoint_subscription()
+	{
 	}
 	string name;
 	helicscpp::Endpoint HelicsSubscriptionEndpoint;
 };
 #endif
 
-typedef enum {
+typedef enum
+{
 	HMT_GENERAL,
 	HMT_JSON,
 } HMESSAGETYPE;
 
-class helics_msg : public gld_object {
+class helics_msg : public gld_object
+{
 public:
-	GL_ATOMIC(double,version);
-	// TODO add published properties here
+	GL_ATOMIC(double, version) // Macro expansion appends ;
+							   // TODO add published properties here
 
 private:
 #if HAVE_HELICS
-	vector<helics_value_subscription*> helics_value_subscriptions;
-	vector<helics_value_publication*> helics_value_publications;
-	vector<helics_endpoint_subscription*> helics_endpoint_subscriptions;
-	vector<helics_endpoint_publication*> helics_endpoint_publications;
-	vector<json_helics_value_subscription*> json_helics_value_subscriptions;
-	vector<json_helics_value_publication*> json_helics_value_publications;
-	vector<json_helics_endpoint_subscription*> json_helics_endpoint_subscriptions;
-	vector<json_helics_endpoint_publication*> json_helics_endpoint_publications;
+	vector<helics_value_subscription *> helics_value_subscriptions;
+	vector<helics_value_publication *> helics_value_publications;
+	vector<helics_endpoint_subscription *> helics_endpoint_subscriptions;
+	vector<helics_endpoint_publication *> helics_endpoint_publications;
+	vector<json_helics_value_subscription *> json_helics_value_subscriptions;
+	vector<json_helics_value_publication *> json_helics_value_publications;
+	vector<json_helics_endpoint_subscription *> json_helics_endpoint_subscriptions;
+	vector<json_helics_endpoint_publication *> json_helics_endpoint_publications;
 #endif
 	vector<string> *inFunctionTopics;
 	varmap *vmap[14];
@@ -204,17 +229,17 @@ private:
 
 public:
 	// required implementations
-	helics_msg(MODULE*);
+	helics_msg(MODULE *);
 	int create(void);
-	int init(OBJECT* parent);
+	int init(OBJECT *parent);
 	int precommit(TIMESTAMP t1);
 	TIMESTAMP presync(TIMESTAMP t1);
 	TIMESTAMP sync(TIMESTAMP t1);
 	TIMESTAMP postsync(TIMESTAMP t1);
-	TIMESTAMP commit(TIMESTAMP t0,TIMESTAMP t1);
+	TIMESTAMP commit(TIMESTAMP t0, TIMESTAMP t1);
 	int configure(char *value);
-//	int parse_helics_function(char *value, COMMUNICATIONTYPE comstype);
-//	void incoming_helics_function(void);
+	//	int parse_helics_function(char *value, COMMUNICATIONTYPE comstype);
+	//	void incoming_helics_function(void);
 	int publishVariables();
 	int subscribeVariables();
 	int publishJsonVariables();

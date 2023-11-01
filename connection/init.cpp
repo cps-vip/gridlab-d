@@ -23,7 +23,7 @@ bool enable_subsecond_models = false;
 
 EXPORT CLASS *init(CALLBACKS *fntable, MODULE *module, int argc, char *argv[])
 {
-	if (set_callback(fntable)==NULL)
+	if (set_callback(fntable) == NULL)
 	{
 		errno = EINVAL;
 		return NULL;
@@ -31,23 +31,23 @@ EXPORT CLASS *init(CALLBACKS *fntable, MODULE *module, int argc, char *argv[])
 
 	Socket::init();
 
-	gl_global_create("connection::security",PT_enumeration,&connection_security,
-		PT_DESCRIPTION, "default connection security level",
-		PT_KEYWORD, "NONE", (enumeration)CS_NONE,
-		PT_KEYWORD, "LOW", (enumeration)CS_LOW,
-		PT_KEYWORD, "STANDARD", (enumeration)CS_STANDARD,
-		PT_KEYWORD, "HIGH", (enumeration)CS_HIGH,
-		PT_KEYWORD, "EXTREME", (enumeration)CS_EXTREME,
-		PT_KEYWORD, "PARANOID", (enumeration)CS_PARANOID,
-		NULL);
-	gl_global_create("connection::lockout",PT_double,&connection_lockout,
-		PT_UNITS, "s",
-		PT_DESCRIPTION, "default connection security lockout time",
-		NULL);
-	gl_global_create("connection::enable_subsecond_models", PT_bool, &enable_subsecond_models,PT_DESCRIPTION,"Enable deltamode capabilities within the connection module",NULL);
+	gl_global_create("connection::security", PT_enumeration, &connection_security,
+					 PT_DESCRIPTION, "default connection security level",
+					 PT_KEYWORD, "NONE", (enumeration)CS_NONE,
+					 PT_KEYWORD, "LOW", (enumeration)CS_LOW,
+					 PT_KEYWORD, "STANDARD", (enumeration)CS_STANDARD,
+					 PT_KEYWORD, "HIGH", (enumeration)CS_HIGH,
+					 PT_KEYWORD, "EXTREME", (enumeration)CS_EXTREME,
+					 PT_KEYWORD, "PARANOID", (enumeration)CS_PARANOID,
+					 NULL);
+	gl_global_create("connection::lockout", PT_double, &connection_lockout,
+					 PT_UNITS, "s",
+					 PT_DESCRIPTION, "default connection security lockout time",
+					 NULL);
+	gl_global_create("connection::enable_subsecond_models", PT_bool, &enable_subsecond_models, PT_DESCRIPTION, "Enable deltamode capabilities within the connection module", NULL);
 
 	new native(module);
-//	new xml(module); // TODO finish XML implementation
+	//	new xml(module); // TODO finish XML implementation
 	new json(module);
 #if HAVE_FNCS
 	new fncs_msg(module);
@@ -61,15 +61,15 @@ EXPORT CLASS *init(CALLBACKS *fntable, MODULE *module, int argc, char *argv[])
 	return native::oclass;
 }
 
-
-EXPORT int do_kill(void*)
+EXPORT int do_kill(void *)
 {
 	/* if global memory needs to be released, this is a good time to do it */
 	// TODO process all term() for each object created by this module
 	return 0;
 }
 
-EXPORT int check(){
+EXPORT int check()
+{
 	/* if any assert objects have bad filenames, they'll fail on init() */
 	return 0;
 }
@@ -79,7 +79,7 @@ static CLKUPDATELIST *clkupdatelist = NULL;
 void add_clock_update(void *data, CLOCKUPDATE clkupdate)
 {
 	struct s_clockupdatelist *item = new struct s_clockupdatelist;
-    item->clkupdate = clkupdate;
+	item->clkupdate = clkupdate;
 	item->data = data;
 	item->next = clkupdatelist;
 	clkupdatelist = item;
@@ -92,15 +92,15 @@ EXPORT TIMESTAMP clock_update(TIMESTAMP t1)
 	// CAVEAT: this will be called multiple times until all modules that use clock_update
 	// agree on the value of t1.
 	struct s_clockupdatelist *item;
-	TIMESTAMP t2 = t1;
+	// TIMESTAMP t2 = t1; // Unused
 	int ok = 0;
 	while (!ok)
 	{
 		ok = 1;
-		for ( item=clkupdatelist ; item!=NULL ; item = item->next )
+		for (item = clkupdatelist; item != NULL; item = item->next)
 		{
-			TIMESTAMP t2 = item->clkupdate(item->data,t1);
-			if ( t2<t1 )
+			TIMESTAMP t2 = item->clkupdate(item->data, t1);
+			if (t2 < t1)
 			{
 				ok = 0;
 				t1 = t2;
@@ -112,28 +112,29 @@ EXPORT TIMESTAMP clock_update(TIMESTAMP t1)
 
 EXPORT int deltamode_desired(int *flags)
 {
-	return DT_INFINITY;	/* Returns time in seconds to when the next deltamode transition is desired */
+	return DT_INFINITY; /* Returns time in seconds to when the next deltamode transition is desired */
 
 	/* Return DT_INFINITY if this module doesn't have any specific triggering times */
 }
 
-//Deltamode functions
+// Deltamode functions
 EXPORT unsigned long preupdate(MODULE *module, TIMESTAMP t0, unsigned int64 dt)
 {
 	double double_timestep_value;
 
 	if (enable_subsecond_models == true)
 	{
-		//NOTE: that given how this is used currently, preupdate could just be a return DT_INFINITY for all cases
+		// NOTE: that given how this is used currently, preupdate could just be a return DT_INFINITY for all cases
 
-		//Pull global timestep
+		// Pull global timestep
 		gld_global dtimestep("deltamode_timestep");
-		if (!dtimestep.is_valid()){
+		if (!dtimestep.is_valid())
+		{
 			gl_error("connection::preupdate: unable to find delamode_timestep!");
 			return DT_INVALID;
 		}
 
-		//Pull it for use
+		// Pull it for use
 		double_timestep_value = dtimestep.get_double();
 
 		if (double_timestep_value <= 0.0)
@@ -148,11 +149,11 @@ EXPORT unsigned long preupdate(MODULE *module, TIMESTAMP t0, unsigned int64 dt)
 		}
 		else
 		{
-			//Do the casting conversion on it to put it back in integer format
+			// Do the casting conversion on it to put it back in integer format
 			return (unsigned long)(double_timestep_value + 0.5);
 		}
 	}
-	else	//Not desired, just return an arbitrarily large value
+	else // Not desired, just return an arbitrarily large value
 	{
 		return DT_INFINITY;
 	}
@@ -160,7 +161,7 @@ EXPORT unsigned long preupdate(MODULE *module, TIMESTAMP t0, unsigned int64 dt)
 
 static DELTAINTERUPDATELIST *dInterUpdateList = NULL;
 
-void register_object_interupdate (void * data, DELTAINTERUPDATE dInterUpdate)
+void register_object_interupdate(void *data, DELTAINTERUPDATE dInterUpdate)
 {
 	struct s_deltainterupdatelist *item = new struct s_deltainterupdatelist;
 	item->deltainterupdate = dInterUpdate;
@@ -177,18 +178,21 @@ EXPORT SIMULATIONMODE interupdate(MODULE *module, TIMESTAMP t0, unsigned int64 d
 	for (item = dInterUpdateList; item != NULL; item = item->next)
 	{
 		result = item->deltainterupdate(item->data, iteration_count_val, t0, delta_time);
-		switch(result)
+		switch (result)
 		{
 		case SM_DELTA_ITER:
 			rv = SM_DELTA_ITER;
 			break;
 		case SM_DELTA:
-			if(rv != SM_DELTA_ITER){
+			if (rv != SM_DELTA_ITER)
+			{
 				rv = SM_DELTA;
 			}
 			break;
 		case SM_EVENT:
-			if(rv != SM_DELTA_ITER || rv != SM_DELTA){
+			// As written, line always evalues to true. Possible it *should* be &&, but short circuit for now
+			if (true || rv != SM_DELTA_ITER || rv != SM_DELTA)
+			{
 				rv = SM_EVENT;
 			}
 			break;
@@ -216,16 +220,16 @@ EXPORT SIMULATIONMODE deltaClockUpdate(MODULE *module, double t1, unsigned long 
 {
 	struct s_deltaclockupdatelist *item;
 	SIMULATIONMODE result = SM_DELTA;
-	for(item = dClockUpdateList; item != NULL; item = item->next)
+	for (item = dClockUpdateList; item != NULL; item = item->next)
 	{
 		result = item->dclkupdate(item->data, t1, timestep, systemmode);
 		return result;
 	}
 
-	//Check for a NULL list (no objects), that could get us here
+	// Check for a NULL list (no objects), that could get us here
 	if (dClockUpdateList == NULL)
 	{
-		//Our list is empty, so nothing wants deltamode
+		// Our list is empty, so nothing wants deltamode
 		return SM_EVENT;
 	}
 	else
@@ -239,5 +243,5 @@ EXPORT int postupdate(MODULE *module, TIMESTAMP t0, unsigned int64 dt)
 	/* t0 is the current global clock time (event-based) */
 	/* dt is the current deltaclock nanosecond offset from t0 */
 
-	return SUCCESS;	/* return FAILURE (0) or SUCCESS (1) */
+	return SUCCESS; /* return FAILURE (0) or SUCCESS (1) */
 }

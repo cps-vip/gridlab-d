@@ -13,17 +13,20 @@
 size_t convert_to_hex(char *hex, size_t hexlen, void *buffer, size_t buflen);
 size_t convert_from_hex(void *buffer, size_t buflen, char *hex, size_t hexlen);
 
-typedef enum {
+typedef enum
+{
 	JT_VOID,
 	JT_LIST,
 	JT_REAL,
 	JT_INTEGER,
 	JT_STRING,
 } JSONTYPE;
-typedef struct _jsonlist {
+typedef struct _jsonlist
+{
 	JSONTYPE type;
 	char tag[32];
-	union {
+	union
+	{
 		double real;
 		int64 integer;
 		struct _jsonlist *list;
@@ -33,26 +36,27 @@ typedef struct _jsonlist {
 	struct _jsonlist *next;
 } JSONLIST;
 
-class json : public native {
+class json : public native
+{
 public:
-	GL_ATOMIC(double,version);
-	// TODO add published properties here
+	GL_ATOMIC(double, version) // Macro expansion appends ;
+							   // TODO add published properties here
 
 private:
 	// TODO add other properties here
 
 public:
 	// required implementations
-	json(MODULE*);
+	json(MODULE *);
 	int create(void);
-	int init(OBJECT*);
+	int init(OBJECT *);
 	int precommit(TIMESTAMP);
 	TIMESTAMP presync(TIMESTAMP);
 	TIMESTAMP sync(TIMESTAMP);
 	TIMESTAMP postsync(TIMESTAMP);
-	TIMESTAMP commit(TIMESTAMP,TIMESTAMP);
-	int prenotify(PROPERTY*,char*);
-	int postnotify(PROPERTY*,char*);
+	TIMESTAMP commit(TIMESTAMP, TIMESTAMP);
+	int prenotify(PROPERTY *, char *);
+	int postnotify(PROPERTY *, char *);
 	int finalize(void);
 	TIMESTAMP plc(TIMESTAMP);
 	int link(char *value);

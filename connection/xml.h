@@ -9,17 +9,19 @@
 #include "gridlabd.h"
 #include "native.h"
 
-typedef enum {
-	UTF8=0, ///< specifies 8-bit XML encoding
-	UTF16=1, ///< specifies 16-bit XML encoding
+typedef enum
+{
+	UTF8 = 0,	   ///< specifies 8-bit XML encoding
+	UTF16 = 1,	   ///< specifies 16-bit XML encoding
 } XML_UTFENCODING; /// UTF encoding specification
 
-class xml : public native {
+class xml : public native
+{
 public:
-	GL_ATOMIC(enumeration,encoding);
-	GL_STRING(char8,version);
-	GL_STRING(char1024,schema);
-	GL_STRING(char1024,stylesheet); 
+	GL_ATOMIC(enumeration, encoding) // Macro expansion -> ;
+	GL_STRING(char8, version)
+	GL_STRING(char1024, schema)
+	GL_STRING(char1024, stylesheet)
 	// TODO add published properties here
 
 private:
@@ -27,16 +29,16 @@ private:
 
 public:
 	// required implementations
-	xml(MODULE*);
+	xml(MODULE *);
 	int create(void);
-	int init(OBJECT*);
+	int init(OBJECT *);
 	int precommit(TIMESTAMP);
 	TIMESTAMP presync(TIMESTAMP);
 	TIMESTAMP sync(TIMESTAMP);
 	TIMESTAMP postsync(TIMESTAMP);
-	TIMESTAMP commit(TIMESTAMP,TIMESTAMP);
-	int prenotify(PROPERTY*,char*);
-	int postnotify(PROPERTY*,char*);
+	TIMESTAMP commit(TIMESTAMP, TIMESTAMP);
+	int prenotify(PROPERTY *, char *);
+	int postnotify(PROPERTY *, char *);
 	int finalize();
 	TIMESTAMP plc(TIMESTAMP);
 	int link(char *value);
@@ -50,5 +52,4 @@ public:
 	static xml *defaults;
 };
 
-#endif /// @} _XML_H 
-
+#endif /// @} _XML_H

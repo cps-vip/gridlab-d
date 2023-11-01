@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 project(GridLAB-D)
 
-OPTION(GLD_WARNING_WORK "Make warnings more pedantic" OFF)
+OPTION(GLD_WARNING_WORK "Make warnings more pedantic" ON)
 if (GLD_WARNING_WORK)
     if (MSVC)
         SET(GLD_COMPILE_OPTIONS
@@ -15,6 +15,11 @@ if (GLD_WARNING_WORK)
                 "-Wall"
                 "-Wextra"
                 "-pedantic"
+		"-Werror"
+                "-Wfatal-errors"
+                "-Wno-unused-parameter"
+                "-Wno-exceptions"
+                "-Wno-unused-function"
                 CACHE INTERNAL
                 "GLD_COMPILE_OPTIONS"
                 )

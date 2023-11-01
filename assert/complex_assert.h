@@ -1,5 +1,5 @@
 /** Assert function
-**/
+ **/
 
 #ifndef _complex_assert_H
 #define _complex_assert_H
@@ -13,19 +13,37 @@ using gld::complex;
 #define _isnan isnan
 #endif
 
-class complex_assert : public gld_object {
+class complex_assert : public gld_object
+{
 public:
-	enum {FULL=0,REAL=1,IMAGINARY=2,MAGNITUDE=3,ANGLE=4};	
-	enum {ONCE_FALSE=0, ONCE_TRUE=1, ONCE_DONE=2};
-	enum {ASSERT_TRUE=1, ASSERT_FALSE, ASSERT_NONE};
+	enum
+	{
+		FULL = 0,
+		REAL = 1,
+		IMAGINARY = 2,
+		MAGNITUDE = 3,
+		ANGLE = 4
+	};
+	enum
+	{
+		ONCE_FALSE = 0,
+		ONCE_TRUE = 1,
+		ONCE_DONE = 2
+	};
+	enum
+	{
+		ASSERT_TRUE = 1,
+		ASSERT_FALSE,
+		ASSERT_NONE
+	};
 
-	GL_ATOMIC(enumeration,status);
-	GL_STRING(char1024,target);											
-	GL_ATOMIC(complex,value);											
-	GL_ATOMIC(enumeration,operation); 
-	GL_ATOMIC(enumeration,once);				
-	GL_STRUCT(complex,once_value);
-	GL_ATOMIC(double,within);
+	GL_ATOMIC(enumeration, status) // macro expansion -> ;
+	GL_STRING(char1024, target)
+	GL_ATOMIC(complex, value)
+	GL_ATOMIC(enumeration, operation)
+	GL_ATOMIC(enumeration, once)
+	GL_STRUCT(complex, once_value)
+	GL_ATOMIC(double, within)
 
 public:
 	/* required implementations */
@@ -34,7 +52,7 @@ public:
 	int init(OBJECT *parent);
 	TIMESTAMP commit(TIMESTAMP t1, TIMESTAMP t2);
 	int postnotify(PROPERTY *prop, char *value);
-	inline int prenotify(PROPERTY*,char*) { return 1; };
+	inline int prenotify(PROPERTY *, char *) { return 1; };
 
 public:
 	static CLASS *oclass;
