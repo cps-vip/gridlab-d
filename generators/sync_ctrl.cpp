@@ -163,7 +163,7 @@ SIMULATIONMODE sync_ctrl::inter_deltaupdate_sync_ctrl(unsigned int64 delta_time,
                 //In Mode B
                 if (sct_metrics_check_mode_B())
                 {
-                    if (~sck_armed_flag)
+                    if (!sck_armed_flag) // Assuming this is logical negation, not bitwise
                     {
                         set_prop(prop_sck_armed_ptr, true); // arm sync_check
                     }
@@ -1016,7 +1016,7 @@ void pid_ctrl::set_cv_init(double init_val)
 double pid_ctrl::step_update(double setpoint, double mpv, double cur_dt)
 {
     //== Step time interval selection
-    double step_dt;
+    double step_dt = 0.0; // Initializing to silence -Wsometimes-uninitialized. Only uninit case is a throw
     if (cur_dt > 0)
         step_dt = cur_dt;
     else if (dt > 0)

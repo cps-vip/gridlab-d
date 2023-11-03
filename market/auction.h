@@ -83,7 +83,7 @@ private:
 protected:
 public:
 	int32 immediate;	// debug variable
-	GL_STRING(char32,unit);		/**< unit of quantity (see unitfile.txt) */
+	GL_STRING(char32,unit)		/**< unit of quantity (see unitfile.txt) */ // Macro expansion -> ;
 	double dPeriod, dLatency;
 	TIMESTAMP period;		/**< time period of auction closing (s) */
 	TIMESTAMP latency;		/**< delay after closing before unit commitment (s) */

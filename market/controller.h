@@ -144,7 +144,7 @@ public:
 private:
 	TIMESTAMP next_run;
 	TIMESTAMP last_run;
-	TIMESTAMP fast_reg_run;		//Ebony
+	// TIMESTAMP fast_reg_run;		//Ebony // Unused private field
 	TIMESTAMP init_time;
 	gld_property *pMonitor;
 	gld_property *pSetpoint;
@@ -154,15 +154,15 @@ private:
 	gld_property *pAvg;
 	gld_property *pStd;
 	gld_property *pMarginalFraction;
-	double *pAvg2;	//Second Market
-	double *pStd2;	//Second Market
+	// double *pAvg2;	//Second Market // Unused private field
+	// double *pStd2;	//Second Market // Unused private field
 	gld_property powerstate_prop;
 	gld_keyword *PS_OFF, *PS_ON, *PS_UNKNOWN;
 	enumeration last_pState;
 	void cheat();
 	int fetch_property(gld_property **prop, const char *propName, OBJECT *obj);
 	int dir, direction;
-	int dir2, direction2;
+	// int dir2, direction2; // Unused private field
 	int market_flag;
 	int last_override;
 	int locked;
@@ -193,13 +193,13 @@ private:
 	char32 aux_state;
 	int64 dtime_delay;
 	TIMESTAMP time_off;
-	bool use_market_period;
+	// bool use_market_period; // Unused private field
 	int last_market;  //ebony
 	int engaged;   //ebony
 	double is_engaged;
 	double delta_u;
 	double P_ON_init;
-	double P_total_init;
+	// double P_total_init; // Unused private field
 	double u_last;
 	BIDINFO controller_bid;
 	BIDINFO controller_bid2;
@@ -212,14 +212,14 @@ private:
 
 	gld_property override_prop;
 	gld_keyword *OV_NORMAL, *OV_ON, *OV_OFF;
-	enumeration *pOverride2;
+	// enumeration *pOverride2; // Unused private field
 	gld_property *pMarketId;
 	gld_property *pMarketId2;
 	gld_property *pClearedPrice;
 	gld_property *pClearedPrice2;
 	gld_property *pPriceCap;
 	gld_property *pPriceCap2;
-	GL_STRING(char32,marketunit);
+	GL_STRING(char32,marketunit) // Macro expansion -> ;
 	char market_unit[32];
 	char market_unit2[32];
 	gld_property *pMarginMode;

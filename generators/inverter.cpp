@@ -18,7 +18,7 @@
 CLASS *inverter::oclass = nullptr;
 inverter *inverter::defaults = nullptr;
 
-static PASSCONFIG passconfig = PC_BOTTOMUP|PC_POSTTOPDOWN;
+// static PASSCONFIG passconfig = PC_BOTTOMUP|PC_POSTTOPDOWN; // Unused
 static PASSCONFIG clockpass = PC_BOTTOMUP;
 
 /* Class registration is only called once to register the class with the core */
@@ -628,16 +628,16 @@ int inverter::create(void)
 int inverter::init(OBJECT *parent)
 {
 	OBJECT *obj = OBJECTHDR(this);
-	PROPERTY *pval = nullptr;
-	bool *dyn_gen_posting;
+	// PROPERTY *pval = nullptr; // Unused
+	// bool *dyn_gen_posting; // Unused
 	unsigned iindex, jindex;
 	gld::complex filter_impedance;
-	double *nominal_voltage;
-	double *ptemp_double;
-	double temp_double_high, temp_double_low, tdiff, ang_diff;
+	// double *nominal_voltage; // Unused
+	// double *ptemp_double; // Unused
+	// double temp_double_high, temp_double_low, tdiff, ang_diff; // Unused
 	FINDLIST *batteries = nullptr;
 	OBJECT *objBattery = nullptr;
-	int index = 0;
+	unsigned int index = 0;
 	STATUS return_value_init;
 	double temp_volt_mag;
 	gld_property *temp_property_pointer = nullptr;
@@ -1100,7 +1100,7 @@ int inverter::init(OBJECT *parent)
 					*/
 				}
 				else {
-					while(objBattery = gl_find_next(batteries,objBattery)){
+					while((objBattery = gl_find_next(batteries,objBattery))){
 						if(index >= batteries->hit_count){
 							gl_warning("VSI: %s does not find a battery attached to it. Now assume VSI: %s is attached with infinite input power.", (obj->name ? obj->name : "Unnamed"), (obj->name ? obj->name : "Unnamed"));
 							break;
@@ -1388,7 +1388,7 @@ int inverter::init(OBJECT *parent)
 					//std::string tempV = "";
 					tempV = "";
 					tempQ = "";
-					for(int i = 0; i < VoltVArSchedInput.length(); i++)	{
+					for(unsigned int i = 0; i < VoltVArSchedInput.length(); i++)	{
 						if(VoltVArSchedInput[i] != ',')	{
 							if(cntr % 2 == 0)
 								tempV += VoltVArSchedInput[i];
@@ -1425,7 +1425,7 @@ int inverter::init(OBJECT *parent)
 					int cntr = 0;
 					tempf = "";
 					tempP = "";
-					for(int i = 0; i < freq_pwrSchedInput.length(); i++)	{
+					for(unsigned int i = 0; i < freq_pwrSchedInput.length(); i++)	{
 						if(freq_pwrSchedInput[i] != ',')	{
 							if(cntr % 2 == 0)
 								tempf += freq_pwrSchedInput[i];
@@ -2451,9 +2451,9 @@ TIMESTAMP inverter::sync(TIMESTAMP t0, TIMESTAMP t1)
 	double ieee_1547_return_value;
 	TIMESTAMP new_ret_value;
 	FUNCTIONADDR test_fxn;
-	bool *gen_dynamic_flag = nullptr;
+	// bool *gen_dynamic_flag = nullptr; // Unused
 	STATUS fxn_return_status;
-	char tmp_index_val;
+	size_t tmp_index_val;
 
 	gld::complex rotate_value;
 	gld::complex calculated_iO[3];
@@ -2832,7 +2832,7 @@ TIMESTAMP inverter::sync(TIMESTAMP t0, TIMESTAMP t1)
 					}
 					else if(number_of_phases_out == 2) // two-phase connection
 					{
-						OBJECT *obj = OBJECTHDR(this);
+						// OBJECT *obj = OBJECTHDR(this); // Unused
 
 						if ( ((phases & 0x01) == 0x01) && phaseA_V_Out.Mag() != 0)
 						{
@@ -4336,13 +4336,17 @@ TIMESTAMP inverter::postsync(TIMESTAMP t0, TIMESTAMP t1)
 	OBJECT *obj = OBJECTHDR(this);
 	TIMESTAMP t2 = TS_NEVER;		//By default, we're done forever!
 	LOAD_FOLLOW_STATUS new_lf_status;
-	PF_REG_STATUS new_pf_reg_status;
-	double new_lf_dispatch_power, curr_power_val, diff_power_val;				
-	double new_pf_reg_distpatch_VAR, curr_real_power_val, curr_reactive_power_val, curr_pf, available_VA, new_Q_out, Q_out, Q_required, Q_available, Q_load;
+	double new_lf_dispatch_power, curr_power_val, diff_power_val;
+	double curr_real_power_val, curr_reactive_power_val, curr_pf, Q_out, Q_available;
+	// TODO: Evaluate if these are correct initial values. If uninitialized, there is a circumstance where we encounter
+	//   -Wsometimes-uninitialized
+	double new_pf_reg_distpatch_VAR = 0.0;
+	PF_REG_STATUS new_pf_reg_status = PF_REG_STATUS::IDLING;
+	// double new_Q_out, available_VA, Q_required, Q_load; // Unused
 	double scaling_factor, Q_target;
 	gld::complex temp_current_val[3];
-	TIMESTAMP dt;
-	double inputPower;
+	// TIMESTAMP dt; // Unused
+	// double inputPower; // Unused
 	gld::complex temp_complex_value;
 
 	//If we have a meter, reset the accumulators
@@ -5494,11 +5498,11 @@ SIMULATIONMODE inverter::inter_deltaupdate(unsigned int64 delta_time, unsigned l
 	double power_diff_val;
 	double prev_error_ed;
 	double prev_error_eq;
-	bool deltaConverged = false;
+	// bool deltaConverged = false; // Unused
 	bool ramp_change;
 	int i;
 
-	double inputPower;
+	// double inputPower; // Unused
 	gld_wlock *test_rlock = nullptr;
 
 	OBJECT *obj = OBJECTHDR(this);
@@ -7216,7 +7220,7 @@ SIMULATIONMODE inverter::inter_deltaupdate(unsigned int64 delta_time, unsigned l
 						pred_state.Q_Out[0] = (value_Circuit_V[0] * ~(I_Out[0])).Im();
 
 						if (Pref > 0) {
-							int stop_temp = 0;
+							// int stop_temp = 0; // Unused
 						}
 						if (value_Circuit_V[0].Mag() > 0.0)
 						{
@@ -7366,7 +7370,7 @@ SIMULATIONMODE inverter::inter_deltaupdate(unsigned int64 delta_time, unsigned l
 							pred_state.Q_Out[i] = (value_Circuit_V[i] * ~(I_Out[i])).Im();
 
 							if (Pref > 0) {
-								int stop_temp = 0;
+								// int stop_temp = 0; // Unused
 							}
 							if (value_Circuit_V[i].Mag() > 0.0)
 							{
@@ -8639,7 +8643,7 @@ double inverter::perform_1547_checks(double timestepvalue)
 	bool uv_low_hit, uv_mid_hit, uv_high_hit, ov_low_hit, ov_high_hit;
 	double temp_pu_voltage;
 	double return_time_freq, return_time_volt, return_value;
-	char indexval;
+	size_t indexval;
 
 	//By default, we're subject to the whims of deltamode
 	return_time_freq = -1.0;
@@ -9399,12 +9403,12 @@ STATUS inverter::updateCurrInjection(int64 iteration_count, bool *converged_fail
 	double power_diff_val;
 	bool ramp_change;
 	double deltat, temp_time;
-	char idx;
+	size_t idx;
 	OBJECT *obj = OBJECTHDR(this);
 	gld::complex temp_VA;
 	bool bus_is_a_swing, bus_is_swing_pq_entry;
 	STATUS temp_status_val;
-	gld_property *temp_property_pointer = nullptr;
+	// gld_property *temp_property_pointer = nullptr; // Unused
 	double mag_diff_value[3];
 
 	//Start with assuming convergence (not a failure)

@@ -20,7 +20,7 @@ Copyright (C) 2008 Battelle Memorial Institute
 CLASS *rectifier::oclass = nullptr;
 rectifier *rectifier::defaults = nullptr;
 
-static PASSCONFIG passconfig = PC_BOTTOMUP;
+// static PASSCONFIG passconfig = PC_BOTTOMUP; // Unused
 static PASSCONFIG clockpass = PC_BOTTOMUP;
 
 /* Class registration is only called once to register the class with the core */

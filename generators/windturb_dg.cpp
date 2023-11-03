@@ -321,7 +321,10 @@ int windturb_dg::init(OBJECT *parent)
 	set temp_phases_set;
 	int temp_phases=0;
 		
-	double ZB, SB, EB;
+	double ZB, EB;
+	// Explicitly initialize SB to 0.0 to silence -Wsometimes-uninitialized.
+	// Throw check below *seems* to be correct in that case
+	double SB = 0.0;
 	gld::complex tst, tst2, tst3, tst4;
 
 	switch (Turbine_Model)	{
@@ -679,7 +682,7 @@ int windturb_dg::init(OBJECT *parent)
 	}
 
 
-	for (int i=0;i < (sizeof (Power_Curve[0]) /sizeof (double));i++) {
+	for (unsigned int i=0;i < (sizeof (Power_Curve[0]) /sizeof (double));i++) {
 		Power_Curve[0][i] = -1;
 		Power_Curve[1][i] = -1;
 	}
@@ -702,7 +705,7 @@ int windturb_dg::init(OBJECT *parent)
 				gl_warning("windturb_dg (id:%d, name:%s): windturb_dg: Unrecognized file type. Resorting to default power curve.", obj->id,obj->name);
 			}
 
-			for (int i=0; i<sizeof(Power_Curve_default[0])/sizeof(double); i++){
+			for (unsigned int i=0; i<sizeof(Power_Curve_default[0])/sizeof(double); i++){
 				Power_Curve[0][i] = Power_Curve_default[0][i];
 				Power_Curve[1][i] = Power_Curve_default[1][i];
 			}
@@ -759,7 +762,7 @@ int windturb_dg::init(OBJECT *parent)
 		}
 
 		int valid_entries = 0;
-		for (int i=0;i < (sizeof (Power_Curve[0]) /sizeof (double));i++) {
+		for (unsigned int i=0;i < (sizeof (Power_Curve[0]) /sizeof (double));i++) {
 			if ((Power_Curve[0][i] != -1) && (Power_Curve[1][i] != -1)){
 				valid_entries ++;
 			}
@@ -1139,6 +1142,7 @@ int windturb_dg::init(OBJECT *parent)
 	if (SB!=0.0)  
 		ZB = EB*EB/SB;
 	else 
+		// Assuming that this reduces to needing Rated_VA to be non-zero, not that all must be specified
 		GL_THROW("Generator power capacity not specified!");
 	/* TROUBLESHOOT 
 	Rated_VA of generator must be specified so that per unit values can be calculated

@@ -323,7 +323,7 @@ int auction::init(OBJECT *parent)
 			}
 			//statprop.interval = (TIMESTAMP)(this->period);
 		} else if(statprop->interval % (int64)(this->period) != 0){
-			static int was_also_warned = 0;
+			// static int was_also_warned = 0; // Unused
 			gl_warning("market statistic '%s' interval not a multiple of market period, rounding towards one interval", statprop->prop->name);
 			/* TROUBLESHOOT
 				Market statistics are only calculated when the market clears, and will be calculated assuming intervals that are multiples of the market's period.
@@ -458,7 +458,7 @@ int auction::init_statistics(){
 	STATISTIC *tail = 0;
 	STATISTIC statprop;
 	PROPERTY *prop = oclass->pmap;
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 	for(prop = oclass->pmap; prop != NULL; prop = prop->next){
 		char frame[32], price[32], stat[32], period[32], period_unit[32];
 		memset(&statprop, 0, sizeof(STATISTIC));
@@ -626,7 +626,7 @@ int auction::update_statistics(){
 /*	Take the current market values and enqueue them on the end of the latency frame queue. */
 int auction::push_market_frame(TIMESTAMP t1){
 	MARKETFRAME *frame = 0;
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 	STATISTIC *stat = stats;
 	double *stats = 0;
 	int64 frame_addr = latency_stride * latency_back + (int64)framedata;
@@ -693,7 +693,8 @@ int auction::check_next_market(TIMESTAMP t1){
 		next_frame.marginal_frac = nframe->marginal_frac;
 		next_frame.cap_ref_unrep = nframe->cap_ref_unrep;
 		if(statistic_mode == ST_ON){
-			for(i = 0, stat = this->stats; i < statistic_count, stat != 0; ++i, stat = stat->next){
+			// TODO: Assume that for relies on compound termination condition, not comma operator return
+			for(i = 0, stat = this->stats; i < statistic_count && stat != 0; ++i, stat = stat->next){
 				gl_set_value(obj, stat->prop, frame->statistics[i]);
 			}
 		}
@@ -707,7 +708,7 @@ TIMESTAMP auction::pop_market_frame(TIMESTAMP t1){
 	MARKETFRAME *frame = 0;
 	OBJECT *obj = OBJECTHDR(this);
 	STATISTIC *stat = stats;
-	double *stats = 0;
+	// double *stats = 0; // Unused
 	uint32 i = 0;
 	if(latency_front == latency_back){
 		gl_verbose("market latency queue has no data");
@@ -738,7 +739,8 @@ TIMESTAMP auction::pop_market_frame(TIMESTAMP t1){
 	current_frame.marginal_frac = frame->marginal_frac;
 	// copy statistics
 	if(statistic_mode == ST_ON){
-		for(i = 0, stat = this->stats; i < statistic_count, stat != 0; ++i, stat = stat->next){
+		// TODO: Assume that for relies on compound termination condition, not comma operator return
+		for(i = 0, stat = this->stats; i < statistic_count && stat != 0; ++i, stat = stat->next){
 			gl_set_value(obj, stat->prop, frame->statistics[i]);
 		}
 	}
@@ -782,7 +784,7 @@ TIMESTAMP auction::presync(TIMESTAMP t0, TIMESTAMP t1)
 
 		/* clear market */
 		thishr = dt.hour;
-		double thismin = dt.minute;
+		// double thismin = dt.minute; // Unused
 		clear_market();
 
 		// advance market_id
@@ -806,7 +808,7 @@ TIMESTAMP auction::postsync(TIMESTAMP t0, TIMESTAMP t1)
 }
 
 void auction::record_curve(double bu, double su){
-	char name[64];
+	// char name[64]; // Unused
 	char timestr[64];
 	DATETIME dt;
 	unsigned int i = 0;
@@ -865,7 +867,7 @@ void auction::record_curve(double bu, double su){
 
 void auction::clear_market(void)
 {
-	unsigned int sph24 = (unsigned int)(3600/period*24);
+	// unsigned int sph24 = (unsigned int)(3600/period*24); // Unused
 	BID unresponsive;
 	extern double bid_offset;
 	double cap_ref_unrep = 0.0;
@@ -874,7 +876,7 @@ void auction::clear_market(void)
 
 	/* handle unbidding capacity */
 	if(capacity_reference_property != NULL && special_mode != MD_FIXED_BUYER){
-		char name[256];
+		// char name[256]; // Unused
 
 		double total_unknown = asks.get_total() - asks.get_total_on() - asks.get_total_off();
 		double *pRefload = gl_get_double(capacity_reference_object, capacity_reference_property);
@@ -960,7 +962,7 @@ void auction::clear_market(void)
 	double single_price = 0.0;
 	/* sort the bids */
 	switch(special_mode){
-		char name[64];
+		// char name[64]; // Unused
 		case MD_SELLERS:
 			offers.sort(false);
 			if (verbose){
@@ -1102,7 +1104,7 @@ void auction::clear_market(void)
 		/* clear market */
 		unsigned int i=0, j=0;
 		BID *buy = asks.getbid(i), *sell = offers.getbid(j);
-		BID clear = {NULL,0,0};
+		BID clear = {NULL, 0, 0, 0, BIDDERSTATE::BS_UNKNOWN};
 		double demand_quantity = 0, supply_quantity = 0;
 		double a=this->pricecap, b=-pricecap;
 		bool check=false;
@@ -1110,7 +1112,7 @@ void auction::clear_market(void)
 		// dump curves
 		if (1)
 		{
-			char name[64];
+			// char name[64]; // Unused
 			unresponsive_sell = 0.0;
 			unresponsive_buy = 0.0;
 			responsive_sell = 0.0; //
@@ -1413,8 +1415,8 @@ void auction::clear_market(void)
 		push_market_frame(gl_globalclock);
 		check_next_market(gl_globalclock);
 	} else {
-		STATISTIC *stat = 0;
-		OBJECT *obj = OBJECTHDR(this);
+		// STATISTIC *stat = 0; // Unused
+		// OBJECT *obj = OBJECTHDR(this); // Unused
 		memcpy(&past_frame, &current_frame, sizeof(MARKETFRAME)); // just the frame
 		// ~ copy new data in
 		current_frame.market_id = cleared_frame.market_id;
@@ -1451,7 +1453,7 @@ void auction::clear_market(void)
 }
 
 void auction::record_bid(char *from, double quantity, double real_price, BIDDERSTATE state){
-	char name_buffer[256];
+	// char name_buffer[256]; // Unused
 	const char *unkState = "unknown";
 	const char *offState = "off";
 	const char *onState = "on";
@@ -1574,7 +1576,7 @@ int auction::submit_nolock(char *from, double quantity, double real_price, KEY k
 		return 1;
 	} else if (mkt_id == market_id && rebid == false){
 		char myname[64];
-		char biddername[64];
+		// char biddername[64]; // Unused
 		KEY out;
 		if (verbose){
 			gl_output("   ...  %s receives %s from object %s for %.2f %s at $%.2f/%s at %s", 

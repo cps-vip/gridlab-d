@@ -33,7 +33,7 @@ using namespace std;
 CLASS *solar::oclass = nullptr;
 solar *solar::defaults = nullptr;
 
-static PASSCONFIG passconfig = PC_BOTTOMUP | PC_POSTTOPDOWN;
+// static PASSCONFIG passconfig = PC_BOTTOMUP | PC_POSTTOPDOWN; // Unused
 static PASSCONFIG clockpass = PC_BOTTOMUP;
 
 /* Class registration is only called once to register the class with the core */

@@ -511,7 +511,7 @@ int inverter_dyn::init(OBJECT *parent)
 	double temp_volt_mag;
 	double temp_volt_ang[3];
 	gld_property *temp_property_pointer = nullptr;
-	gld_property *Frequency_mapped = nullptr;
+	// gld_property *Frequency_mapped = nullptr; // Unused
 	gld_wlock *test_rlock = nullptr;
 	bool temp_bool_value;
 	int temp_idx_x, temp_idx_y;
@@ -1435,7 +1435,7 @@ int inverter_dyn::init(OBJECT *parent)
 TIMESTAMP inverter_dyn::presync(TIMESTAMP t0, TIMESTAMP t1)
 {
 	TIMESTAMP t2 = TS_NEVER;
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 
 	//If we have a meter, reset the accumulators
 	if (parent_is_a_meter)
@@ -1460,7 +1460,7 @@ TIMESTAMP inverter_dyn::sync(TIMESTAMP t0, TIMESTAMP t1)
 
 	gld::complex temp_power_val[3];
 	gld::complex temp_intermed_curr_val[3];
-	char loop_var;
+	size_t loop_var;
 
 	gld::complex temp_complex_value;
 	gld_wlock *test_rlock = nullptr;
@@ -1960,7 +1960,7 @@ TIMESTAMP inverter_dyn::sync(TIMESTAMP t0, TIMESTAMP t1)
 /* Update the injected currents with respect to VA_Out */
 void inverter_dyn::update_iGen(gld::complex VA_Out)
 {
-	char loop_var;
+	size_t loop_var;
 
 	if (parent_is_single_phase) // single phase/split-phase implementation
 	{
@@ -2018,7 +2018,7 @@ void inverter_dyn::check_and_update_VA_Out(OBJECT *obj)
 		// Update V_DC
 		if (!dc_interface_objects.empty())
 		{
-			int temp_idx;
+			unsigned int temp_idx;
 			STATUS fxn_return_status;
 
 			//Loop through and call the DC objects
@@ -2186,7 +2186,7 @@ SIMULATIONMODE inverter_dyn::inter_deltaupdate(unsigned int64 delta_time, unsign
 	double mag_diff_val;
 	bool proceed_to_qsts = true;	//Starts true - prevent QSTS by exception
 	int i;
-	int temp_dc_idx;
+	unsigned int temp_dc_idx;
 	STATUS fxn_DC_status;
 	OBJECT *temp_DC_obj;
 
@@ -2334,7 +2334,7 @@ SIMULATIONMODE inverter_dyn::inter_deltaupdate(unsigned int64 delta_time, unsign
 
 					if (!dc_interface_objects.empty())
 					{
-						int temp_idx;
+						unsigned int temp_idx;
 						//V_DC was set here, somehow
 						STATUS fxn_return_status;
 
@@ -2696,7 +2696,7 @@ SIMULATIONMODE inverter_dyn::inter_deltaupdate(unsigned int64 delta_time, unsign
 
 					if (!dc_interface_objects.empty())
 					{
-						int temp_idx;
+						unsigned int temp_idx;
 						//V_DC was set here, somehow
 						STATUS fxn_return_status;
 
@@ -3051,7 +3051,7 @@ SIMULATIONMODE inverter_dyn::inter_deltaupdate(unsigned int64 delta_time, unsign
 
 					if (!dc_interface_objects.empty())
 					{
-						int temp_idx;
+						unsigned int temp_idx;
 						//V_DC was set here, somehow
 						STATUS fxn_return_status;
 
@@ -3436,7 +3436,7 @@ SIMULATIONMODE inverter_dyn::inter_deltaupdate(unsigned int64 delta_time, unsign
 
 					if (!dc_interface_objects.empty())
 					{
-						int temp_idx;
+						unsigned int temp_idx;
 						//V_DC was set here, somehow
 						STATUS fxn_return_status;
 
@@ -5610,7 +5610,7 @@ STATUS inverter_dyn::init_dynamics(INV_DYN_STATE *curr_time)
 					//Figure out what our DC power is
 					P_DC = VA_Out.Re();
 
-					int temp_idx;
+					unsigned int temp_idx;
 					STATUS fxn_return_status;
 
 					//Loop through and call the DC objects
@@ -5726,7 +5726,7 @@ STATUS inverter_dyn::init_dynamics(INV_DYN_STATE *curr_time)
 					//Figure out what our DC power is
 					P_DC = VA_Out.Re();
 
-					int temp_idx;
+					unsigned int temp_idx;
 					STATUS fxn_return_status;
 
 					//Loop through and call the DC objects
@@ -6239,13 +6239,13 @@ STATUS inverter_dyn::updateCurrInjection(int64 iteration_count,bool *converged_f
 	gld::complex temp_V1, temp_V2;
 	bool bus_is_a_swing, bus_is_swing_pq_entry;
 	STATUS temp_status_val;
-	gld_property *temp_property_pointer;
+	// gld_property *temp_property_pointer; // Unused
 	bool running_in_delta;
-	bool limit_hit;
+	// bool limit_hit; // Unused
 	double freq_diff_angle_val, tdiff;
 	double mag_diff_val[3];
 	gld::complex rotate_value;
-	char loop_var;
+	size_t loop_var;
 	gld::complex intermed_curr_calc[3];
 
 	//Assume starts converged (no failure)
@@ -6603,7 +6603,9 @@ STATUS inverter_dyn::updateCurrInjection(int64 iteration_count,bool *converged_f
 	//Default else - things are handled elsewhere
 
 	//Check to see if we're disconnected
-	if (enable_1547_compliance && !inverter_1547_status || (value_MeterStatus == 0))
+	// TODO: Check that this is the right local operation
+	//   I'm assuming we want A && (B || C)
+	if (enable_1547_compliance && (!inverter_1547_status || (value_MeterStatus == 0)))
 	{
 		//Disconnected - offset our admittance contribution - could remove it from powerflow - visit this in the future
 		if (parent_is_single_phase)
@@ -6722,7 +6724,7 @@ STATUS inverter_dyn::updateCurrInjection(int64 iteration_count,bool *converged_f
 //Internal function to the mapping of the DC object update function
 STATUS inverter_dyn::DC_object_register(OBJECT *DC_object)
 {
-	FUNCTIONADDR temp_add = nullptr;
+	// FUNCTIONADDR temp_add = nullptr; // Unused
 	DC_OBJ_FXNS temp_DC_struct;
 	OBJECT *obj = OBJECTHDR(this);
 
@@ -6839,7 +6841,7 @@ double inverter_dyn::perform_1547_checks(double timestepvalue)
 	bool uv_low_hit, uv_mid_hit, uv_high_hit, ov_low_hit, ov_high_hit;
 	double temp_pu_voltage;
 	double return_time_freq, return_time_volt, return_value;
-	char indexval;
+	size_t indexval;
 
 	//By default, we're subject to the whims of deltamode
 	return_time_freq = -1.0;

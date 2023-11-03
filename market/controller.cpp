@@ -459,7 +459,10 @@ int controller::init(OBJECT *parent){
 			if(fetch_property(&pClearingType2, "current_market.clearing_type", pMarket2) == 0) {
 				return 0;
 			}
-			gld_property *marketunit2;
+			// So, we declare an uninit pointer, then call get_string on that uninit ptr?
+			// Not sure what the actual use case is here, but I'm calling new just to be safe
+			// gld_property *marketunit2;
+			gld_property *marketunit2 = new gld_property;
 			if(fetch_property(&pClearingType2, "unit", pMarket2) == 0) {
 				return 0;
 			}
@@ -1121,17 +1124,17 @@ TIMESTAMP controller::presync(TIMESTAMP t0, TIMESTAMP t1){
 TIMESTAMP controller::sync(TIMESTAMP t0, TIMESTAMP t1){
 	double bid = -1.0;
 	int64 no_bid = 0; // flag gets set when the current temperature drops in between the the heating setpoint and cooling setpoint curves
-	double rampify = 0.0;
+	// double rampify = 0.0; // Unused
 	extern double bid_offset;
 	double deadband_shift = 0.0;
 	double shift_direction = 0.0;
-	double shift_setpoint = 0.0;
-	double prediction_ramp = 0.0;
-	double prediction_range = 0.0;
-	double midpoint = 0.0;
+	// double shift_setpoint = 0.0; // Unused
+	// double prediction_ramp = 0.0; // Unused
+	// double prediction_range = 0.0; // Unused
+	// double midpoint = 0.0; // Unused
 	TIMESTAMP fast_reg_run;
 	OBJECT *hdr = OBJECTHDR(this);
-	char mktname[1024];
+	// char mktname[1024]; // Unused
 	char ctrname[1024];
 	double avgP = 0.0;
 	double stdP = 0.0;
@@ -1873,7 +1876,7 @@ TIMESTAMP controller::sync(TIMESTAMP t0, TIMESTAMP t1){
 			}
 
 			// apply overrides
-			if((use_override == OU_ON)){
+			if(use_override == OU_ON){
 				if(last_q != 0.0){
 					if(clear_price == last_p && clear_price != pCap){
 						if ( marginMode==AM_DENY )
@@ -1925,7 +1928,7 @@ TIMESTAMP controller::sync(TIMESTAMP t0, TIMESTAMP t1){
 		}
 		
 		// submit bids
-		double previous_q = last_q; //store the last value, in case we need it
+		// double previous_q = last_q; //store the last value, in case we need it // Unused
 		last_p = 0.0;
 		last_q = 0.0;
 		
@@ -2005,7 +2008,7 @@ TIMESTAMP controller::sync(TIMESTAMP t0, TIMESTAMP t1){
 		{
 			if (last_pState != ps)
 			{
-				KEY bid = (KEY)(lastmkt_id == marketId ? lastbid_id : -1);
+				// KEY bid = (KEY)(lastmkt_id == marketId ? lastbid_id : -1); // Unused
 				double my_bid = -pCap;
 				if ( ps != *PS_OFF  )
 					my_bid = last_p;
@@ -2320,8 +2323,8 @@ int controller::dev_level_ctrl(TIMESTAMP t0, TIMESTAMP t1){
 	else
 		is_engaged = 0;
 	
-	OBJECT *hdr = OBJECTHDR(this);
-	double my_id = hdr->id;
+	// OBJECT *hdr = OBJECTHDR(this); // Unused
+	// double my_id = hdr->id; // Unused
 
 	// Not sure if this is needed, but lets clean up the Override signal if we are entering a new market
 	//  We'll catch the new signal one reg signal too late for now
