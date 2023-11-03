@@ -95,7 +95,7 @@ public:
 	EXCHANGETRANSLATOR *xlate_out;
 
 	// Explicit virtual destructor
-	virtual ~connection_mode();
+	virtual ~connection_mode(void) = default;
 
 protected:
 	connection_transport *transport;

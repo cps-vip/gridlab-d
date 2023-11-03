@@ -1635,7 +1635,9 @@ int helics_msg::subscribeVariables()
 			}
 			else
 			{
-				throw("Couldn't parse the json message for HelicsEndpoint %s. %s.", (*sub)->name.c_str(), parse_err.c_str());
+				char buf[128];
+				snprintf(buf, 128, "Couldn't parse the json message for HelicsEndpoint %s. %s.", (*sub)->name.c_str(), parse_err.c_str());
+				throw(buf);
 			}
 		}
 	}
@@ -1778,8 +1780,8 @@ int helics_msg::publishJsonVariables()
 
 int helics_msg::subscribeJsonVariables()
 {
-	OBJECT *obj = OBJECTHDR(this);
-	char buf[1024] = "";
+	// OBJECT *obj = OBJECTHDR(this); // Unused
+	// char buf[1024] = "";
 	string simName = string(gld_helics_federate->getName());
 	Json::Value jsonMessage;
 	Json::Value jsonData;
@@ -1910,7 +1912,9 @@ int helics_msg::subscribeJsonVariables()
 			}
 			else
 			{
-				throw("Couldn't parse the json message for HelicsSubscription %s. %s.", (*sub)->target.c_str(), parse_err.c_str());
+				char buf[128];
+				snprintf(buf, 128, "Couldn't parse the json message for HelicsSubscription %s. %s.", (*sub)->target.c_str(), parse_err.c_str());
+				throw(buf);
 			}
 		}
 	}
@@ -2041,7 +2045,9 @@ int helics_msg::subscribeJsonVariables()
 			}
 			else
 			{
-				throw("Couldn't parse the json message for HelicsEndpoint %s. %s.", (*sub)->name.c_str(), parse_err.c_str());
+				char buf[128];
+				snprintf(buf, 128, "Couldn't parse the json message for HelicsEndpoint %s. %s.", (*sub)->name.c_str(), parse_err.c_str());
+				throw(buf);
 			}
 		}
 	}
