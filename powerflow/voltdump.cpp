@@ -104,7 +104,7 @@ void voltdump::dump(TIMESTAMP t){
 		fprintf(outfile,"node_name,voltA_mag,voltA_angle,voltB_mag,voltB_angle,voltC_mag,voltC_angle\n");
 	
 	obj = 0;
-	while (obj=gl_find_next(nodes,obj))
+	while ((obj=gl_find_next(nodes,obj)))
 	{
 		if(gl_object_isa(obj, "triplex_node", "powerflow"))
 		{

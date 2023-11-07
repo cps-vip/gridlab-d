@@ -152,7 +152,8 @@ int transformer::init(OBJECT *parent)
 		return 2; // defer
 	}
 	double V_base,za_basehi,za_baselo,V_basehi;
-	double sa_base;
+	double sa_base = 0.0; // Initialize to silence -Wsometimes-uninitialized; If used without re-setting, will cause
+	                      //   divide by zero error in subsequent calculations
 	double nt, nt_a, nt_b, nt_c, inv_nt_a, inv_nt_b, inv_nt_c;
 	gld::complex zt, zt_a, zt_b, zt_c, z0, z1, z2, zc;
 	FINDLIST *climate_list = nullptr;
@@ -1331,7 +1332,7 @@ int transformer::transformer_inrush_mat_update(void)
 	gld::complex Zo;
 	double A_sat, B_sat, C_sat;
 	gld::complex work_val_cplex;
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 
 	//Set neutral impedance, arbitrarily
 	Zo = 1e8;

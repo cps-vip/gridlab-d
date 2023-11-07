@@ -69,7 +69,7 @@ int underground_line::init(OBJECT *parent)
 	double *temp_rating_value = nullptr;
 	double temp_rating_continuous = 10000.0;
 	double temp_rating_emergency = 20000.0;
-	char index;
+	size_t index;
 	int type_A, type_B, type_C, type_N;
 	int cond_present, cond_present_CN, cable_types_value;
 	OBJECT *temp_obj;
@@ -1187,7 +1187,7 @@ int underground_line::isa(char *classname)
 int underground_line::test_phases(line_configuration *config, const char ph)
 {
 	int return_val;
-	bool condCheck, condNotPres;
+	bool condCheck = true, condNotPres = true; // Initialize these vars to trip throws below unless reset
 	OBJECT *obj = GETOBJECT(this);
 	double temp_shield_gmr_val, temp_neutral_gmr_val;
 

@@ -207,7 +207,7 @@ EXPORT double change_recloser_state(OBJECT *thisobj, unsigned char phase_change,
 	char desA, desB, desC;
 	recloser *reclobj;
 	switch_object *swtchobj;
-	FUNCTIONADDR funadd = nullptr;
+	// FUNCTIONADDR funadd = nullptr; // Unused
 
 	//Init
 	count_values = 0.0;

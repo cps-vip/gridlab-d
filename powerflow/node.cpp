@@ -1503,12 +1503,12 @@ TIMESTAMP node::presync(TIMESTAMP t0)
 	OBJECT *obj = OBJECTHDR(this);
 	TIMESTAMP t1 = powerflow_object::presync(t0);
 	TIMESTAMP temp_time_value, temp_t1_value;
-	node *temp_par_node = nullptr;
-	gld_property *temp_complex_property = nullptr;
-	gld_wlock *test_rlock = nullptr;
+	// node *temp_par_node = nullptr; // Unused
+	// gld_property *temp_complex_property = nullptr; // Unused
+	// gld_wlock *test_rlock = nullptr; // Unused
 	gld::complex temp_complex_value;
 	complex_array temp_complex_array;
-	int temp_idx_x, temp_idx_y;
+	// int temp_idx_x, temp_idx_y; // Unused
 
 	//Determine the flag state - see if a schedule is overriding us
 	if (service_status_dbl>-1.0)
@@ -1583,7 +1583,9 @@ TIMESTAMP node::presync(TIMESTAMP t0)
 			*/
 		}
 
-		if (((phase_to_check & (busphasesIn | busphasesOut) != phase_to_check) && (busphasesIn != 0 && busphasesOut != 0) && (solver_method == SM_NR)))
+		if ((( (phase_to_check & (busphasesIn | busphasesOut)) != phase_to_check) &&
+		     (busphasesIn != 0 && busphasesOut != 0) &&
+			 (solver_method == SM_NR)))
 		{
 			gl_error("node:%d (%s) has more phases leaving than entering",obj->id,obj->name);
 			/* TROUBLESHOOT
@@ -2328,7 +2330,7 @@ TIMESTAMP node::sync(TIMESTAMP t0)
 	gld::complex delta_shunt_curr[3];
 	gld::complex dy_curr_accum[3];
 	gld::complex temp_current_val[3];
-	char loop_index_val;
+	size_t loop_index_val;
 	gld::complex temp_curr_rotate_value, temp_curr_calc_value;
 	gld_property *temp_property;
 	
@@ -2746,7 +2748,7 @@ TIMESTAMP node::sync(TIMESTAMP t0)
 			static auto NR_Solver = std::make_unique<NR_Solver_Eigen>();
 #endif
 
-			if ((NR_curr_bus==NR_bus_count) && (obj==NR_swing_bus))	//Only run the solver once everything has populated
+			if (((unsigned int)NR_curr_bus==NR_bus_count) && (obj==NR_swing_bus))	//Only run the solver once everything has populated
 			{
 				bool bad_computation=false;
 				NRSOLVERMODE powerflow_type;
@@ -2831,7 +2833,7 @@ TIMESTAMP node::sync(TIMESTAMP t0)
 				//See where we wanted to go
 				return NR_retval;
 			}
-			else if (NR_curr_bus==NR_bus_count)	//Population complete, we're not swing, let us go (or we never go on)
+			else if ((unsigned int)NR_curr_bus==NR_bus_count)	//Population complete, we're not swing, let us go (or we never go on)
 				return t1;
 			else	//Population of data busses is not complete.  Flag us for a go-around, they should be ready next time
 			{
@@ -3352,7 +3354,7 @@ int node::kmldump(int (*stream)(const char*,...))
 
 		// voltages
 		stream("<TR><TH ALIGN=LEFT>Voltage</TH>");
-		for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+		for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 		{
 			if ( phase[i] )
 			{
@@ -3366,7 +3368,7 @@ int node::kmldump(int (*stream)(const char*,...))
 		}
 		stream("</TR>\n");
 		stream("<TR><TH ALIGN=LEFT>&nbsp</TH>");
-		for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+		for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 		{
 			if ( phase[i] )
 				stream("<TD ALIGN=RIGHT STYLE=\"font-family:courier;\"><NOBR>%.3f</NOBR></TD><TD ALIGN=LEFT>&deg;</TD>", voltage[i].Arg()*180/3.1416 - basis[i]);
@@ -3396,7 +3398,7 @@ int node::kmldump(int (*stream)(const char*,...))
 		{
 			// power
 			stream("<TR><TH ALIGN=LEFT>Power</TH>");
-			for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+			for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 			{
 				if ( phase[i] )
 					stream("<TD ALIGN=RIGHT STYLE=\"font-family:courier;\"><NOBR>%.3f</NOBR></TD><TD ALIGN=LEFT>kW</TD>", power[i].Re()/1000);
@@ -3405,7 +3407,7 @@ int node::kmldump(int (*stream)(const char*,...))
 			}
 			stream("</TR>\n");
 			stream("<TR><TH ALIGN=LEFT>&nbsp</TH>");
-			for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+			for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 			{
 				if ( phase[i] )
 					stream("<TD ALIGN=RIGHT STYLE=\"font-family:courier;\"><NOBR>%.3f</NOBR></TD><TD ALIGN=LEFT>kVAR</TD>", power[i].Im()/1000);
@@ -3630,7 +3632,7 @@ OBJECT *node::NR_master_swing_search(const char *node_type_value,bool main_swing
 	FINDLIST *bus_list = gl_find_objects(FL_NEW,FT_CLASS,SAME,node_type_value,FT_END);
 
 	//Parse the findlist
-	while(temp_obj=gl_find_next(bus_list,temp_obj))
+	while((temp_obj=gl_find_next(bus_list,temp_obj)))
 	{
 		list_node = OBJECTDATA(temp_obj,node);
 
@@ -3670,7 +3672,7 @@ int node::NR_populate(void)
 {
 	//Object header for names
 	OBJECT *me = OBJECTHDR(this);
-	node *temp_par_node = nullptr;
+	// node *temp_par_node = nullptr; // Unused
 	gld_property *temp_bool_property = nullptr;
 	gld_wlock *test_rlock = nullptr;
 	bool temp_bool_val;
@@ -5089,7 +5091,7 @@ double node::perform_GFA_checks(double timestepvalue)
 	bool voltage_violation, frequency_violation, trigger_disconnect, check_phase;
 	double temp_pu_voltage;
 	double return_time_freq, return_time_volt, return_value;
-	char indexval;
+	size_t indexval;
 	unsigned char phasevals;
 	OBJECT *hdr = OBJECTHDR(this);
 

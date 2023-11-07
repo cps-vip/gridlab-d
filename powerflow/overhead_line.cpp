@@ -70,7 +70,7 @@ int overhead_line::init(OBJECT *parent)
 	double *temp_rating_value = nullptr;
 	double temp_rating_continuous = 10000.0;
 	double temp_rating_emergency = 20000.0;
-	char index;
+	size_t index;
 	OBJECT *temp_obj;
 	int result = line::init(parent);
 
@@ -885,7 +885,9 @@ int overhead_line::isa(char *classname)
 */
 void overhead_line::test_phases(line_configuration *config, const char ph)
 {
-	bool condCheck, condNotPres;
+	bool condCheck = true, condNotPres = true;
+	// FIXME: Default these to the error case below. The conditionals should cover all cases, and if this initialization
+	//   causes a throw then the conditionals should be reexamined. 
 	OBJECT *obj = GETOBJECT(this);
 
 	if (ph=='A')

@@ -224,7 +224,7 @@ int series_compensator::create()
 
 int series_compensator::init(OBJECT *parent)
 {
-	char iindex, jindex;
+	size_t iindex, jindex;
 	int result = link_object::init(parent);
 	OBJECT *obj = OBJECTHDR(this);
 	gld_property *temp_volt_prop;
@@ -732,7 +732,7 @@ void series_compensator::sercom_prePre_fxn(void)
 //Functionalized version of the code for deltamode - "post-link::presync" portions
 void series_compensator::sercom_postPre_fxn(void)
 {
-	char phaseWarn;
+	// char phaseWarn; // Unused
 	int jindex,kindex;
 	gld::complex Ylefttemp[3][3];
 	gld::complex Yto[3][3];
@@ -851,7 +851,7 @@ void series_compensator::sercom_postPre_fxn(void)
 //Pass value is for deltamode pass information (currently in modified Euler flagging)
 int series_compensator::sercom_postPost_fxn(unsigned char pass_value, double deltat)
 {
-	char index_val;
+	size_t index_val;
 	unsigned char phase_mask;
 	double temp_diff_val[3];
 	int return_val;

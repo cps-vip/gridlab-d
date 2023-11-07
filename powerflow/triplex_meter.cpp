@@ -340,7 +340,7 @@ TIMESTAMP triplex_meter::presync(TIMESTAMP t0)
     if (t0 != 0 && start_timestamp == 0)
         start_timestamp = t0;
 
-	return triplex_node::presync(t0);
+    return triplex_node::presync(t0);
 }
 //Sync needed for reliability
 TIMESTAMP triplex_meter::sync(TIMESTAMP t0)
@@ -422,9 +422,9 @@ TIMESTAMP triplex_meter::sync(TIMESTAMP t0)
 // Synchronize a distribution triplex_meter
 TIMESTAMP triplex_meter::postsync(TIMESTAMP t0, TIMESTAMP t1)
 {
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 	TIMESTAMP rv = TS_NEVER;
-	TIMESTAMP hr = TS_NEVER;
+	// TIMESTAMP hr = TS_NEVER; // Unused
 
 	//Call node postsync now, otherwise current_inj isn't right
 	rv = triplex_node::postsync(t1);
@@ -1092,7 +1092,7 @@ EXPORT int triplex_meter_kmldata(OBJECT *obj,int (*stream)(const char*,...))
 
 int triplex_meter::kmldata(int (*stream)(const char*,...))
 {
-	int phase[3] = {has_phase(PHASE_A),has_phase(PHASE_B),has_phase(PHASE_C)};
+	// int phase[3] = {has_phase(PHASE_A),has_phase(PHASE_B),has_phase(PHASE_C)}; // Unused
 
 	// TODO: this voltage and power breakdown should go in triplex_node
 	double basis = has_phase(PHASE_A) ? 0 : ( has_phase(PHASE_B) ? 240 : has_phase(PHASE_C) ? 120 : 0 );

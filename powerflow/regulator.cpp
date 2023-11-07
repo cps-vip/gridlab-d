@@ -101,7 +101,7 @@ int regulator::create()
 int regulator::init(OBJECT *parent)
 {
 	bool TapInitialValue[3];
-	char jindex;
+	size_t jindex;
 	int result = link_object::init(parent);
 
 	//Check for deferred
@@ -442,7 +442,7 @@ TIMESTAMP regulator::presync(TIMESTAMP t0)
 	regulator_configuration *pConfig = OBJECTDATA(configuration, regulator_configuration);
 	TIMESTAMP t1;
 	double t1_dbl, t0_dbl;
-	char phaseWarn;
+	// char phaseWarn; // Unused
 
 	//Cast the timestamp
 	t0_dbl = (double)t0;
@@ -1429,7 +1429,7 @@ int regulator::kmldata(int (*stream)(const char*,...))
 
 	// tap position
 	stream("<TR><TH ALIGN=LEFT>Tap position</TH>");
-	for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+	for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 	{
 		if ( phase[i] )
 			stream("<TD ALIGN=CENTER COLSPAN=2 STYLE=\"font-family:courier;\"><NOBR>%d</NOBR></TD>", tap[i]);
@@ -1445,7 +1445,7 @@ int regulator::kmldata(int (*stream)(const char*,...))
 	if ( run_realtime.get_bool() )
 	{
 		stream("<TR><TH ALIGN=LEFT>Raise to</TH>");
-		for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+		for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 		{
 			if ( phase[i] )
 				stream("<TD ALIGN=CENTER COLSPAN=2 STYLE=\"font-family:courier;\"><FORM ACTION=\"http://%s:%d/kml/%s\" METHOD=GET><INPUT TYPE=SUBMIT NAME=\"tap_%c\" VALUE=\"%d\" /></FORM></TD>",
@@ -1455,7 +1455,7 @@ int regulator::kmldata(int (*stream)(const char*,...))
 		}
 		stream("</TR>\n");
 		stream("<TR><TH ALIGN=LEFT>Lower to</TH>");
-		for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+		for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 		{
 			if ( phase[i] )
 				stream("<TD ALIGN=CENTER COLSPAN=2 STYLE=\"font-family:courier;\"><FORM ACTION=\"http://%s:%d/kml/%s\" METHOD=GET><INPUT TYPE=SUBMIT NAME=\"tap_%c\" VALUE=\"%d\" /></FORM></TD>",

@@ -123,7 +123,7 @@ int switch_object::create()
 int switch_object::init(OBJECT *parent)
 {
 	double phase_total, switch_total;
-	char indexa, indexb;
+	size_t indexa, indexb;
 	set phase_from, phase_to;
 
 	OBJECT *obj = OBJECTHDR(this);
@@ -1480,12 +1480,13 @@ void switch_object::switch_sync_function(void)
 //Function to replicate sync_switch_function, but not call anything (just for reliability checks)
 unsigned char switch_object::switch_expected_sync_function(void)
 {
-	unsigned char phases_out;
+	unsigned char phases_out = 0x0;
 	double phase_total, switch_total;
 	SWITCHSTATE temp_A_state, temp_B_state, temp_C_state;
 	enumeration temp_status;
 
 	gl_verbose ("  switch_expected_sync_function:%d:%d:%d", phase_A_state, phase_B_state, phase_C_state);
+	// TODO: What happens here if the solver isn't SM_NR? unreported failure case?
 	if (solver_method==SM_NR)	//Newton-Raphson checks
 	{
 		//Store current phases
@@ -2281,7 +2282,7 @@ int switch_object::kmldata(int (*stream)(const char*,...))
 
 	// switch state
 	stream("<TR><TH ALIGN=LEFT>Status</TH>");
-	for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+	for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 	{
 		if ( phase[i] )
 			stream("<TD ALIGN=CENTER COLSPAN=2 STYLE=\"font-family:courier;\"><NOBR>%s</NOBR></TD>", state[i]?"CLOSED":"OPEN");
@@ -2297,7 +2298,7 @@ int switch_object::kmldata(int (*stream)(const char*,...))
 	if ( run_realtime.get_bool() )
 	{
 		stream("<TR><TH ALIGN=LEFT>Control</TH>");
-		for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+		for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 		{
 			if ( phase[i] )
 				stream("<TD ALIGN=CENTER COLSPAN=2 STYLE=\"font-family:courier;\"><FORM ACTION=\"http://%s:%d/kml/%s\" METHOD=GET><INPUT TYPE=SUBMIT NAME=\"switchA\" VALUE=\"%s\" /></FORM></TD>",

@@ -136,7 +136,7 @@ TIMESTAMP sync_check::presync(TIMESTAMP t0)
 
 TIMESTAMP sync_check::sync(TIMESTAMP t0)
 {
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 	TIMESTAMP tret = powerflow_object::sync(t0);
 
 	return tret;
@@ -144,7 +144,7 @@ TIMESTAMP sync_check::sync(TIMESTAMP t0)
 
 TIMESTAMP sync_check::postsync(TIMESTAMP t0)
 {
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 	TIMESTAMP tret = powerflow_object::postsync(t0);
 
 	//Code to check if we need a deltamode call

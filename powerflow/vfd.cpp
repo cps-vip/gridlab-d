@@ -390,7 +390,7 @@ void vfd::CheckParameters()
 STATUS vfd::VFD_current_injection(void)
 {
 	gld::complex currRat, lossCurr[3];
-	int index_val, index_val_inner, index_new_limit;
+	unsigned int index_val, index_val_inner, index_new_limit;
 	double z_val, driveCurrPower, temp_coeff, settleVolt, avg_freq_value;
 	gld::complex temp_power_val, powerOutElectrical, powerInElectrical;
 	gld::complex settleVoltOut[3];
@@ -856,7 +856,7 @@ gld::complex vfd::complex_exp(double angle)
 STATUS vfd::alloc_freq_arrays(double delta_t_val)
 {
 	OBJECT *obj = OBJECTHDR(this);
-	int a_index;
+	unsigned int a_index;
 	
 	//See if we were commanded to reallocate -- this would be done on a zero-th pass of interupdate, most likely (or in postupdate, when transitioning out)
 	if (force_array_realloc)
@@ -933,7 +933,8 @@ STATUS vfd::alloc_freq_arrays(double delta_t_val)
 //Module-level deltamode call
 SIMULATIONMODE vfd::inter_deltaupdate_vfd(unsigned int64 delta_time, unsigned long dt, unsigned int iteration_count_val,bool interupdate_pos)
 {
-	double dt_value, deltatimedbl;
+	double dt_value;
+	// double deltatimedbl; // Unused
 	STATUS ret_value;
 
 	//See if we're the very first pass/etc
