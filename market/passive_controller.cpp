@@ -806,7 +806,7 @@ int passive_controller::calc_elasticity(TIMESTAMP t0, TIMESTAMP t1){
 		
 			double dt = (double)(t1 - t0);
 			
-			double tt = old_critical_day;
+			// double tt = old_critical_day; // Unused
 			//if(true){
 			if(old_critical_day!=critical_day){
 				
@@ -1326,7 +1326,7 @@ int passive_controller::calc_ramp(TIMESTAMP t0, TIMESTAMP t1){
 
 int passive_controller::calc_dlc(TIMESTAMP t0, TIMESTAMP t1){
 	
-	OBJECT *hdr = OBJECTHDR(this);
+	// OBJECT *hdr = OBJECTHDR(this); // Unused
 		
 	if(output_state_addr != 0){
 		output_state = *(int *)output_state_addr;
@@ -1396,7 +1396,7 @@ int passive_controller::calc_dutycycle(TIMESTAMP t0, TIMESTAMP t1){
 	
 	if (pool_pump_model == true)
 	{
-		OBJECT *hdr = OBJECTHDR(this);
+		// OBJECT *hdr = OBJECTHDR(this); // Unused
 		
 		if(output_state_addr != 0){
 			output_state = *(int *)output_state_addr;
@@ -1499,7 +1499,7 @@ int passive_controller::calc_proboff(TIMESTAMP t0, TIMESTAMP t1){
 
 int passive_controller::calc_pfc(TIMESTAMP t0, TIMESTAMP t1){
 	OBJECT *hdr = OBJECTHDR(this);
-	double direction = -1;
+	// double direction = -1; // Unused
 		
 	if(output_state_addr != 0){ 
 		output_state = *(int *)output_state_addr; // keep water heater in previous state

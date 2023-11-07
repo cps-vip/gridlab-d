@@ -297,7 +297,9 @@ int motor::init(OBJECT *parent)
 	OBJECT *obj = OBJECTHDR(this);
 	int result;
 	bool temp_house_motor_state;
-	double temp_house_capacity_info, temp_house_cop;
+	double temp_house_capacity_info = 0.0, temp_house_cop = 0.0; // Init temp_house_cop to silence -Wsometimes-uninitialized
+	// TODO: if temp_house_cop is ever used without being reset, this will cause a divide-by-zero exception, and the logic
+	//   for determining when it is reset should be examined
 	enumeration temp_house_type;
 	gld_property *temp_gld_property;
 	gld_wlock *test_rlock = nullptr;
@@ -1562,7 +1564,9 @@ void motor::TPIMUpdateProtection(double delta_time) {
         
         // Under-voltage protection relay timer
         if (uv_lockout == 0) {
-            if (((Vas.Mag() <= uv_relay_trip_V && Vas.Mag() > 0.001) || (Vbs.Mag() <= uv_relay_trip_V && Vbs.Mag() > 0.001) || (Vcs.Mag() <= uv_relay_trip_V) && Vcs.Mag() > 0.001) && uv_relay_install == uv_relay_INSTALLED) { //  This particular AC motor does have an under-voltage relay that will trip
+			// FIXME: Assume this breaks down to:
+			//   ((A & B) || (C && D) || (E && F)) && G
+            if (((Vas.Mag() <= uv_relay_trip_V && Vas.Mag() > 0.001) || (Vbs.Mag() <= uv_relay_trip_V && Vbs.Mag() > 0.001) || ((Vcs.Mag() <= uv_relay_trip_V) && Vcs.Mag() > 0.001)) && uv_relay_install == uv_relay_INSTALLED) { //  This particular AC motor does have an under-voltage relay that will trip
                 if (uv_relay_time <= uv_relay_trip_time) { //In under-voltage state and accumulating time
                     //std::cout << "Under voltage: " << Vas.Mag() << "\t" << Vbs.Mag() << "\t" << Vcs.Mag()<< "\n";
                     uv_relay_time = uv_relay_time + delta_time;

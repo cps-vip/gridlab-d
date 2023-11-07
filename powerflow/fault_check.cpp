@@ -341,7 +341,7 @@ TIMESTAMP fault_check::sync(TIMESTAMP t0)
 
 			//Overall check -- catches the first run, but we'll keep it here anyways
 			//Internal check, for random "islands"
-			if (NR_curr_bus != NR_bus_count)
+			if ((unsigned int)NR_curr_bus != NR_bus_count)
 			{
 				GL_THROW("fault_check: Incomplete initialization detected - this will cause issues");
 				/*  TROUBLESHOOT
@@ -2155,7 +2155,7 @@ void fault_check::search_associated_grids(unsigned int node_int, int grid_counte
 	for (index=0; index<NR_busdata[node_int].Link_Table_Size; index++)
 	{
 		//See which end of the link we are
-		if (NR_branchdata[NR_busdata[node_int].Link_Table[index]].from == node_int)	//From end
+		if ((unsigned int)NR_branchdata[NR_busdata[node_int].Link_Table[index]].from == node_int)	//From end
 		{
 			//Set the node-ref - must be other end
 			node_ref = NR_branchdata[NR_busdata[node_int].Link_Table[index]].to;
@@ -2219,7 +2219,7 @@ void fault_check::search_associated_grids(unsigned int node_int, int grid_counte
 //Function to remove a divergent island
 STATUS fault_check::disable_island(int island_number)
 {
-	int index_value;
+	unsigned int index_value;
 	TIMESTAMP curr_time_val_TS;
 	double curr_time_val_DBL;
 	FILE *FPOutput;

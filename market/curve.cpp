@@ -72,6 +72,8 @@ KEY curve::submit(BID *bid)
 	case BS_ON:
 		total_on += bid->quantity;
 		break;
+	case BS_UNKNOWN: // Handle unknown state by doing nothing
+		break;
 	}
 	total += bid->quantity;
 
@@ -131,6 +133,8 @@ KEY curve::resubmit(BID *bid)
 		case BS_ON:
 			total_on += bid->quantity;
 			break;
+		case BS_UNKNOWN: // Handle unknown case by doing nothing
+			break;
 		}
 		total += bid->quantity;
 
@@ -145,6 +149,8 @@ KEY curve::resubmit(BID *bid)
 		case BS_ON:
 			total_on -= old->quantity;
 			break;
+		case BS_UNKNOWN: // Handle unknown case by doing nothing
+			break;
 		}
 		total -= old->quantity;
 
@@ -158,6 +164,8 @@ KEY curve::resubmit(BID *bid)
 			break;
 		case BS_ON:
 			total_on += bid->quantity;
+			break;
+		case BS_UNKNOWN: // Handle unknown case by doing nothing
 			break;
 		}
 		total += bid->quantity;
@@ -192,6 +200,8 @@ int curve::remove_bid(KEY bid_id)
 			break;
 		case BS_ON:
 			total_on -= old->quantity;
+			break;
+		case BS_UNKNOWN: // Handle unknown case by doing nothing
 			break;
 		}
 		total -= old->quantity;

@@ -87,11 +87,11 @@ int simple::init(OBJECT *parent)
 		bool (**op)(double,double);
 		double *value;
 	} map[] = {
-		{"objective",	objective.get_string(),	&pObjective},
-		{"variable",	variable.get_string(),	&pVariable},
+		{"objective",	objective.get_string(),	&pObjective, nullptr, nullptr}, // Deal with missing fields by explicitly null init
+		{"variable",	variable.get_string(),	&pVariable, nullptr, nullptr},
 		{"constraint",	constraint.get_string(),	&pConstraint, &(constrain.op), &(constrain.value)},
 	};
-	int n;
+	unsigned int n;
 	for ( n=0 ; n<sizeof(map)/sizeof(map[0]) ; n++ )
 	{
 		char oname[1024];

@@ -20,6 +20,7 @@ if (GLD_WARNING_WORK)
                 "-Wno-unused-parameter"
                 "-Wno-exceptions"
                 "-Wno-unused-function"
+                "-Wno-deprecated-declarations"
                 CACHE INTERNAL
                 "GLD_COMPILE_OPTIONS"
                 )

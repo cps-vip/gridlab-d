@@ -102,7 +102,7 @@ void currdump::dump(TIMESTAMP t){
 		fprintf(outfile,"link_name,currA_mag,currA_angle,currB_mag,currB_angle,currC_mag,currC_angle\n");
 	}
 	obj = 0;
-	while (obj=gl_find_next(links,obj)){
+	while ((obj=gl_find_next(links,obj))){
 		if(gl_object_isa(obj, "link", "powerflow")){
 
 			//Map the properties of interest - first current

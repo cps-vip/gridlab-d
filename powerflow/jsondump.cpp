@@ -113,16 +113,16 @@ STATUS jsondump::dump_system(void)
 	OBJECT *objhdr = OBJECTHDR(this);
 	OBJECT *obj = nullptr;
 	OBJECT *obj_lineConf = nullptr;
-	OBJECT *obj_tplineConf = nullptr;
+	// OBJECT *obj_tplineConf = nullptr; // Unused
 	char buffer[1024];
-	FILE *fn = nullptr;
-	int index = 0;
+	// FILE *fn = nullptr; // Unused
+	unsigned int index = 0;
 	int phaseCount;
 	double per_unit_base, temp_impedance_base, temp_voltage_base, temp_de_pu_base;
 	gld::complex temp_complex_voltage_value[3];
 	gld::complex temp_complex_power_value[3];
 	double temp_voltage_output_value;
-	int indexA, indexB, indexC;
+	unsigned int indexA, indexB, indexC;
 	gld::complex *b_mat_pu;
 	bool *b_mat_defined;
 	gld::complex *b_mat_tp_pu;
@@ -154,7 +154,7 @@ STATUS jsondump::dump_system(void)
 	Json::Value jsonArray1; // for storing rmatrix and xmatrix
 	Json::Value jsonArray2; // for storing rmatrix and xmatrix
 	// Start write to file
-	Json::StyledWriter writer;
+	Json::StyledWriter writer; // TODO: This writer is ostensibly deprecated, replace with supported writer
 	// Open file for writing
 	ofstream out_file;
 
@@ -3464,7 +3464,8 @@ STATUS jsondump::dump_system(void)
 
 STATUS jsondump::dump_reliability(void)
 {
-	FINDLIST *powermetrics, *fuses, *reclosers, *sectionalizers, *relays, *capacitors, *regulators;
+	FINDLIST *powermetrics, *fuses, *reclosers, *sectionalizers, *relays = nullptr, *capacitors, *regulators = nullptr;
+	// FINDLIST *relays = nullptr; // Never assigned to.
 	fuse *fuseData;
 	recloser *reclData;
 	sectionalizer *secData;
@@ -3477,11 +3478,11 @@ STATUS jsondump::dump_reliability(void)
 						const_cast<char*>("MAIFI"), NULL};
 	int index1366;
 	double *temp_double;
-	enumeration *temp_emu;
+	// enumeration *temp_emu; // Unused
 	OBJECT *obj = nullptr;
 	char buffer[1024];
-	FILE *fn = nullptr;
-	int index = 0;
+	// FILE *fn = nullptr; // Unused
+	unsigned int index = 0;
 
 	// metrics JSON value
 	Json::Value metrics_reliability;	// Output dictionary for line and line configuration metrics
@@ -3511,7 +3512,7 @@ STATUS jsondump::dump_reliability(void)
 	index = 0;
 	if(powermetrics != nullptr){
 
-		while(obj = gl_find_next(powermetrics,obj)){
+		while((obj = gl_find_next(powermetrics,obj))){
 
 			// Allow only one power metrics
 			if(index > 1){
@@ -3546,7 +3547,7 @@ STATUS jsondump::dump_reliability(void)
 	index = 0;
 	if(fuses != nullptr){
 
-		while(obj = gl_find_next(fuses,obj)){
+		while((obj = gl_find_next(fuses,obj))){
 			if(index >= fuses->hit_count){
 				break;
 			}
@@ -3592,7 +3593,7 @@ STATUS jsondump::dump_reliability(void)
 	index = 0;
 	if(reclosers != nullptr){
 
-		while(obj = gl_find_next(reclosers,obj)){
+		while((obj = gl_find_next(reclosers,obj))){
 			if(index >= reclosers->hit_count){
 				break;
 			}
@@ -3638,7 +3639,7 @@ STATUS jsondump::dump_reliability(void)
 	index = 0;
 	if(sectionalizers != nullptr){
 
-		while(obj = gl_find_next(sectionalizers,obj)){
+		while((obj = gl_find_next(sectionalizers,obj))){
 			if(index >= sectionalizers->hit_count){
 				break;
 			}
@@ -3691,7 +3692,7 @@ STATUS jsondump::dump_reliability(void)
 	index = 0;
 	if(capacitors != nullptr){
 
-		while(obj = gl_find_next(capacitors,obj)){
+		while((obj = gl_find_next(capacitors,obj))){
 			if(index >= capacitors->hit_count){
 				break;
 			}
@@ -3737,7 +3738,7 @@ STATUS jsondump::dump_reliability(void)
 	index = 0;
 	if(regulators != nullptr){
 
-		while(obj = gl_find_next(regulators,obj)){
+		while((obj = gl_find_next(regulators,obj))){
 			if(index >= regulators->hit_count){
 				break;
 			}
@@ -3961,7 +3962,7 @@ enumeration jsondump::get_enum_value(OBJECT *obj, const char *name)
 OBJECT *jsondump::get_object_value(OBJECT *obj, const char *name)
 {
 	gld_property *pQuantity;
-	gld_rlock *test_rlock;
+	gld_rlock *test_rlock = nullptr; // passed to getp<OBJECT*>, but the impl doesn't actually deref?
 	OBJECT *output_value;
 	OBJECT *objhdr = OBJECTHDR(this);
 

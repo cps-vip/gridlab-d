@@ -75,15 +75,15 @@ int impedance_dump::dump(TIMESTAMP t)
 {
 	FINDLIST *capacitors, *fuses, *ohlines, *reclosers, *regulators, *relays, *sectionalizers, *series_reactors, *switches, *transformers, *tplines, *uglines;
 	OBJECT *obj = nullptr;
-	char buffer[1024];
+	// char buffer[1024]; // Unused
 	FILE *fn = nullptr;
-	int index = 0;
-	int count = 0;
+	unsigned int index = 0;
+	// int count = 0; // Unused
 	int x = 0;
 	int y = 0;
-	CLASS *obj_class;
+	// CLASS *obj_class; // Unused
 	char timestr[64];
-	PROPERTY *xfmrconfig;
+	// PROPERTY *xfmrconfig; // Unused
 
 	//find the link objects
 	if(group[0] == '\0'){
@@ -142,7 +142,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(fuses,obj)){
+		while((obj = gl_find_next(fuses,obj))){
 			if(index >= fuses->hit_count){
 				break;
 			}
@@ -335,7 +335,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(ohlines,obj)){
+		while((obj = gl_find_next(ohlines,obj))){
 			if(index >= ohlines->hit_count){
 				break;
 			}
@@ -531,7 +531,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(reclosers,obj)){
+		while((obj = gl_find_next(reclosers,obj))){
 			if(index >= reclosers->hit_count){
 				break;
 			}
@@ -724,7 +724,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(regulators,obj)){
+		while((obj = gl_find_next(regulators,obj))){
 			if(index >= regulators->hit_count){
 				break;
 			}
@@ -921,7 +921,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(relays,obj)){
+		while((obj = gl_find_next(relays,obj))){
 			if(index >= relays->hit_count){
 				break;
 			}
@@ -1114,7 +1114,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(sectionalizers,obj)){
+		while((obj = gl_find_next(sectionalizers,obj))){
 			if(index >= sectionalizers->hit_count){
 				break;
 			}
@@ -1307,7 +1307,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(series_reactors,obj)){
+		while((obj = gl_find_next(series_reactors,obj))){
 			if(index >= series_reactors->hit_count){
 				break;
 			}
@@ -1500,7 +1500,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(switches,obj)){
+		while((obj = gl_find_next(switches,obj))){
 			if(index >= switches->hit_count){
 				break;
 			}
@@ -1695,7 +1695,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(transformers,obj)){
+		while((obj = gl_find_next(transformers,obj))){
 			if(index >= transformers->hit_count){
 				break;
 			}
@@ -1912,7 +1912,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(tplines,obj)){
+		while((obj = gl_find_next(tplines,obj))){
 			if(index >= tplines->hit_count){
 				break;
 			}
@@ -2082,7 +2082,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(uglines,obj)){
+		while((obj = gl_find_next(uglines,obj))){
 			if(index >= uglines->hit_count){
 				break;
 			}
@@ -2278,7 +2278,7 @@ int impedance_dump::dump(TIMESTAMP t)
 			gl_error("Failed to allocate fuse array.");
 			return TS_NEVER;
 		}
-		while(obj = gl_find_next(capacitors,obj)){
+		while((obj = gl_find_next(capacitors,obj))){
 			if(index >= capacitors->hit_count){
 				break;
 			}

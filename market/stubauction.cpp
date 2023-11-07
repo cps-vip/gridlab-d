@@ -69,7 +69,7 @@ int stubauction::create(void)
 /* Object initialization is called once after all object have been created */
 int stubauction::init(OBJECT *parent)
 {
-	OBJECT *obj=OBJECTHDR(this);
+	// OBJECT *obj=OBJECTHDR(this); // Unused
 	market_id = 0;
 	if(period == 0) period = 300;
 	clearat = nextclear();

@@ -262,8 +262,8 @@ TIMESTAMP double_controller::presync(TIMESTAMP t0, TIMESTAMP t1){
 }
 
 TIMESTAMP double_controller::sync(TIMESTAMP t0, TIMESTAMP t1){
-	double bid = -1.0;
-	double demand = 0.0;
+	// double bid = -1.0; // Unused
+	// double demand = 0.0; // Unused
 	double heat_ramp, cool_ramp;
 	double new_limit;
 	OBJECT *hdr = OBJECTHDR(this);
@@ -389,7 +389,7 @@ TIMESTAMP double_controller::sync(TIMESTAMP t0, TIMESTAMP t1){
 	}
 
 	if(bid_mode == BM_ON){
-		KEY bid_id = (lastbid_id == *pMarketID ? lastbid_id : -1);
+		// KEY bid_id = (lastbid_id == *pMarketID ? lastbid_id : -1); // Unused
 		// override
 		//bid_id = -1;
 

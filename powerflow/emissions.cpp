@@ -445,7 +445,7 @@ TIMESTAMP emissions::postsync(TIMESTAMP t0)
 	gld::complex temp_power;
 	gld::complex energy_for_calc;
 	bool energy_requirement;
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 	TIMESTAMP tret = powerflow_object::postsync(t0);
 
 	//First cycle, set up the interval

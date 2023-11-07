@@ -489,7 +489,7 @@ TIMESTAMP meter::presync(TIMESTAMP t0)
     if (t0 != 0 && start_timestamp == 0)
         start_timestamp = t0;
 
-	return node::presync(t0);
+    return node::presync(t0);
 }
 
 //Functionalized portion for deltamode compatibility
@@ -569,7 +569,7 @@ TIMESTAMP meter::sync(TIMESTAMP t0)
 
 TIMESTAMP meter::postsync(TIMESTAMP t0, TIMESTAMP t1)
 {
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 	gld::complex temp_current;
 	TIMESTAMP tretval;
 
@@ -1519,11 +1519,11 @@ EXPORT int meter_kmldata(OBJECT *obj,int (*stream)(const char*,...))
 int meter::kmldata(int (*stream)(const char*,...))
 {
 	int phase[3] = {has_phase(PHASE_A),has_phase(PHASE_B),has_phase(PHASE_C)};
-	double basis[3] = {0,240,120};
+	// double basis[3] = {0,240,120}; // Unused
 
 	// power
 	stream("<TR><TH ALIGN=LEFT>Power</TH>");
-	for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+	for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 	{
 		if ( phase[i] )
 			stream("<TD ALIGN=RIGHT STYLE=\"font-family:courier;\"><NOBR>%.3f</NOBR></TD><TD ALIGN=LEFT>kVA</TD>", indiv_measured_power[i].Mag()/1000);

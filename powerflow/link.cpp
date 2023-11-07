@@ -961,7 +961,7 @@ void link_object::NR_link_sync_fxn(void)
 	gld::complex work_vector_A[6], work_vector_B[6], work_vector_C[6];
 	gld::complex work_vector_D[3];
 	gld::complex temp_value_A, temp_value_B;
-	char jindex, kindex;
+	size_t jindex, kindex;
 	FUNCTIONADDR transformer_calc_function;
 	FUNCTIONADDR topo_update_function;
 	STATUS temp_status_variable;
@@ -2975,7 +2975,7 @@ TIMESTAMP link_object::sync(TIMESTAMP t0)
 	fNode=OBJECTDATA(from,node);
 	tNode=OBJECTDATA(to,node);
 #endif
-	OBJECT *obj = OBJECTHDR(this);
+	// OBJECT *obj = OBJECTHDR(this); // Unused
 
 	if (is_closed())
 	{
@@ -2983,7 +2983,8 @@ TIMESTAMP link_object::sync(TIMESTAMP t0)
 		{
 			node *f;
 			node *t;
-			set reverse = get_flow(&f,&t);
+			// set reverse = get_flow(&f,&t); // Result unused
+			get_flow(&f, &t);
 
 #ifdef SUPPORT_OUTAGES
 			tNode->condition=fNode->condition;
@@ -3341,11 +3342,12 @@ TIMESTAMP link_object::postsync(TIMESTAMP t0)
 	TIMESTAMP TRET=TS_NEVER;
 	//double temp_power_check;
 
-	if ((solver_method==SM_FBS))
+	if (solver_method==SM_FBS)
 	{
 		node *f;
 		node *t; //@# make else/if statement for solver method NR; & set current_out->to t->node current_inj;
-		set reverse = get_flow(&f,&t);
+		// set reverse = get_flow(&f,&t); // Result unused
+		get_flow(&f, &t);
 
 		// update published current_out values;
 		READLOCK_OBJECT(to);
@@ -3518,8 +3520,8 @@ int link_object::kmldump(int (*stream)(const char*,...))
 	else
 	{
 		// values
-		node *pFrom = OBJECTDATA(from,node);
-		node *pTo = OBJECTDATA(to,node);
+		// node *pFrom = OBJECTDATA(from,node); // Unused
+		// node *pTo = OBJECTDATA(to,node); // Unused
 		int phase[3] = {has_phase(PHASE_A),has_phase(PHASE_B),has_phase(PHASE_C)};
 		gld::complex flow[3];
 		gld::complex current[3];
@@ -5034,7 +5036,7 @@ int link_object::link_fault_on(OBJECT **protect_obj, char *fault_type, int *impl
 {
 	unsigned char phase_remove = 0x00;	//Default is no phases removed
 	unsigned char rand_phases,temp_phases, work_phases;			//Working variable
-	char numphase, phaseidx;
+	size_t numphase, phaseidx;
 	double randval, ext_result_dbl;
 	double tempphase[3];
 	double *temp_double_val;
@@ -5044,7 +5046,7 @@ int link_object::link_fault_on(OBJECT **protect_obj, char *fault_type, int *impl
 	OBJECT *objhdr = OBJECTHDR(this);
 	OBJECT *tmpobj;
 	FUNCTIONADDR funadd = nullptr;
-	double type_fault;
+	double type_fault = 0.0; // Init to something innocuous to silence -Wsometimes-uninitialized
 	bool switch_val;
 	gld::complex C_mat[7][7];
 	int64 pf_resultval;
@@ -10875,7 +10877,7 @@ int link_object::link_fault_off(int *implemented_fault, char *imp_fault_name)
 {
 	unsigned char phase_restore = 0x00;	//Default is no phases restored
 	unsigned char temp_phases, temp_phases_B, work_phases;			//Working variable
-	char phaseidx, indexval;
+	size_t phaseidx, indexval;
 	int temp_node, ext_result;
 	double ext_result_dbl;
 	OBJECT *objhdr = OBJECTHDR(this);
@@ -12826,13 +12828,15 @@ int link_object::link_fault_off(int *implemented_fault, char *imp_fault_name)
 //Function to remove enacted fault on link but not restore the system.
 int link_object::clear_fault_only(int *implemented_fault, char *imp_fault_name) {
 	unsigned char phase_restore = 0x00;	//Default is no phases restored
-	unsigned char temp_phases, temp_phases_B, work_phases;			//Working variable
-	char phaseidx, indexval;
-	int temp_node, ext_result;
-	double ext_result_dbl;
+	unsigned char temp_phases, work_phases;			//Working variable
+	// unsigned char temp_phases_B;  // Unused
+	size_t phaseidx, indexval;
+	int temp_node;
+	// int ext_result; // Unused
+	// double ext_result_dbl; // Unused
 	OBJECT *objhdr = OBJECTHDR(this);
 	OBJECT *tmpobj;
-	FUNCTIONADDR funadd = nullptr;
+	// FUNCTIONADDR funadd = nullptr; // Unused
 	bool switch_val;
 
 	//Check our operations mode

@@ -620,8 +620,9 @@ EXPORT int check()
 		*tomap;		/* counts the number of references to any given node */
 	int errcount = 0;
 	int objct = 0;
-	int queuef = 0, queueb = 0, queuect = 0;
-	int islandct = 0;
+	int queuect = 0;
+	// int queuef = 0, queueb = 0; // Unused
+	// int islandct = 0; // Unused
 
 	GLOBALVAR *gvroot = nullptr;
 	PFLIST anchor, *tlist = nullptr;
@@ -645,7 +646,7 @@ EXPORT int check()
 	/* per-object checks */
 
 	/* check from/to info on links */
-	while (obj=gl_find_next(list,obj))
+	while ((obj=gl_find_next(list,obj)))
 	{
 		if (gl_object_isa(obj,"node"))
 		{
@@ -665,8 +666,8 @@ EXPORT int check()
 			link_object *pLink = OBJECTDATA(obj,link_object);
 			OBJECT *from = pLink->from;
 			OBJECT *to = pLink->to;
-			node *tNode = OBJECTDATA(to, node);
-			node *fNode = OBJECTDATA(from, node);
+			// node *tNode = OBJECTDATA(to, node); // Unused
+			// node *fNode = OBJECTDATA(from, node); // Unused
 			/* count 'to' reference */
 			tomap[to->id]++;
 			/* check link connections */
@@ -797,9 +798,9 @@ EXPORT int check()
 	if(gvroot != nullptr){
 		PFLIST *front=nullptr, *back=nullptr, *del=nullptr; /* node queue */
 		OBJECT *_node = gl_get_object((char *)gvroot->prop->addr);
-		OBJECT *_link = nullptr;
+		// OBJECT *_link = nullptr; // Unused
 		int *rankmap = (int *)malloc((size_t)(objct*sizeof(int)));
-		int bct = 0;
+		// int bct = 0; // Unused
 		if(_node == nullptr){
 			gl_error("powerflow check(): Unable to do directionality check, root node name not found.");
 		} else {

@@ -208,7 +208,7 @@ int load::isa(char *classname)
 int load::create(void)
 {
 	int res = node::create();
-	char index_x,index_y;
+	size_t index_x,index_y;
         
 	maximum_voltage_error = 0;
 	base_power[0] = base_power[1] = base_power[2] = 0;
@@ -527,19 +527,21 @@ void load::load_update_fxn(void)
 	bool all_three_phases, transf_from_stdy_state;
 	gld::complex intermed_impedance[3];
 	gld::complex intermed_impedance_dy[6];
-	int index_var, extract_node_ref;
+	int index_var;
+	// int extract_node_ref; // Unused
 	bool volt_below_thresh;
 	double voltage_base_val;
 	double voltage_pu_vals[3];
 	gld::complex nominal_voltage_value;
 	int node_reference_value;
 	double curr_delta_time;
-	bool require_inrush_update, local_shunt_update;
+	bool require_inrush_update;
+	// bool local_shunt_update; // Unused
 	gld::complex working_impedance_value, working_data_value, working_admittance_value;
 	double workingvalue;
 	OBJECT *obj = nullptr;
 	double baseangles[3];
-	node *temp_par_node = nullptr;
+	// node *temp_par_node = nullptr; // Unused
 	gld::complex adjusted_FBS_current[6];
 	gld::complex adjust_FBS_temp_nominal_voltage[6];
 	double adjust_FBS_temp_voltage_mag[6];
@@ -3682,7 +3684,7 @@ int load::kmldata(int (*stream)(const char*,...))
 
 	// impedance demand
 	stream("<TR><TH ALIGN=LEFT>Z</TH>");
-	for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+	for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 	{
 		if ( phase[i] )
 			stream("<TD ALIGN=RIGHT STYLE=\"font-family:courier;\"><NOBR>%.3f</NOBR></TD><TD ALIGN=LEFT>kVA</TD>", constant_impedance[i].Mag()/1000);
@@ -3693,7 +3695,7 @@ int load::kmldata(int (*stream)(const char*,...))
 
 	// current demand
 	stream("<TR><TH ALIGN=LEFT>I</TH>");
-	for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+	for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 	{
 		if ( phase[i] )
 			stream("<TD ALIGN=RIGHT STYLE=\"font-family:courier;\"><NOBR>%.3f</NOBR></TD><TD ALIGN=LEFT>kVA</TD>", constant_current[i].Mag()/1000);
@@ -3704,7 +3706,7 @@ int load::kmldata(int (*stream)(const char*,...))
 
 	// power demand
 	stream("<TR><TH ALIGN=LEFT>P</TH>");
-	for ( int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
+	for ( unsigned int i = 0 ; i<sizeof(phase)/sizeof(phase[0]) ; i++ )
 	{
 		if ( phase[i] )
 			stream("<TD ALIGN=RIGHT STYLE=\"font-family:courier;\"><NOBR>%.3f</NOBR></TD><TD ALIGN=LEFT>kVA</TD>", constant_power[i].Mag()/1000);

@@ -103,6 +103,8 @@ int load_tracker::init(OBJECT *parent)
 	case PT_int64:
 		pointer.i64 = gl_get_int64_by_name(target, target_prop.get_string());
 		break;
+	default: // Default case for all other property types, assume we don't care
+		break;
 	}
 
 	// The VALUEPOINTER is a union of pointers so we only need to check one of them....
@@ -189,6 +191,8 @@ void load_tracker::update_feedback_variable()
 			break;
 		case PT_int64:
 			feedback = (double)(*(pointer.i64));
+			break;
+		default: // Default case for all other property types, assume we don't care
 			break;
 		}
 	//Unlock

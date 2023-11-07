@@ -129,7 +129,7 @@ int fuse::create()
 */
 int fuse::init(OBJECT *parent)
 {
-	char jindex, kindex;
+	size_t jindex, kindex;
 	OBJECT *obj = OBJECTHDR(this);
 
 	if ((phases & PHASE_S) == PHASE_S)
@@ -651,8 +651,8 @@ TIMESTAMP fuse::sync(TIMESTAMP t0)
 
 TIMESTAMP fuse::postsync(TIMESTAMP t0)
 {
-	OBJECT *hdr = OBJECTHDR(this);
-	char jindex;
+	// OBJECT *hdr = OBJECTHDR(this); // Unused
+	size_t jindex;
 	unsigned char goodphases = 0x00;
 	TIMESTAMP Ret_Val[3], t1;
 
@@ -744,7 +744,7 @@ TIMESTAMP fuse::postsync(TIMESTAMP t0)
 // derived from function fuse_sync_function
 void fuse::fuse_change_status_function(void)
 {
-	unsigned char pres_status;
+	unsigned char pres_status = 0;
 
 	if (solver_method==SM_NR)	//Newton-Raphson checks
 	{
@@ -1168,7 +1168,7 @@ void fuse::set_fuse_faulted_phases(unsigned char desired_status)
 */
 void fuse::fuse_check(set phase_to_check, gld::complex *fcurr)
 {
-	char indexval;
+	size_t indexval;
 	char phase_verbose;
 	unsigned char work_phase;
 	FUSESTATE *valstate;
